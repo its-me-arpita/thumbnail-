@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ThumbAI — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- Animated background orbs -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ═══════════════════ SHELL ═══════════════════ -->
+  <div class="shell">
+
+    <!-- ── SIDEBAR ─────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">✦</div>
+        <div class="logo-text">
+          <span class="logo-name">ThumbAI</span>
+          <span class="logo-tag">Studio</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Workspace</div>
+        <a href="#" class="nav-item active" data-page="generator">
+          <span class="nav-item-icon">🎨</span>
+          <span class="nav-item-label">Generator</span>
+          <span class="nav-item-badge new-badge">New</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="history">
+          <span class="nav-item-icon">🕐</span>
+          <span class="nav-item-label">History</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="templates">
+          <span class="nav-item-icon">📐</span>
+          <span class="nav-item-label">Templates</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="batch">
+          <span class="nav-item-icon">⚡</span>
+          <span class="nav-item-label">Batch Generate</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="nav-section-label">Account</div>
+        <a href="#" class="nav-item disabled" data-page="brand-kit">
+          <span class="nav-item-icon">🏷️</span>
+          <span class="nav-item-label">Brand Kit</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="settings">
+          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-label">Settings</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ai-status">
+          <span class="status-dot"></span>
+          <div class="ai-status-text">
+            <span class="ai-model">Gemini AI</span>
+            <span class="ai-state">Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN AREA ──────────────────────────────── -->
+    <div class="main-area">
+
+      <!-- Top Header -->
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </button>
+
+        <div class="topbar-breadcrumb">
+          <span class="breadcrumb-root">ThumbAI</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current" id="pageTitle">Generator</span>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-chip">
+            <span class="status-dot"></span>
+            <span>Gemini Powered</span>
+          </div>
+          <div class="topbar-avatar">A</div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+
+        <!-- Page Hero -->
+        <div class="page-hero">
+          <div class="page-hero-left">
+            <h1 class="page-hero-title">AI Thumbnail Generator</h1>
+            <p class="page-hero-sub">Create stunning, scroll-stopping thumbnails in seconds with Gemini AI</p>
+          </div>
+          <div class="page-hero-chips">
+            <div class="stat-chip"><span>⚡</span> Fast</div>
+            <div class="stat-chip"><span>🎨</span> AI-Powered</div>
+            <div class="stat-chip"><span>📐</span> 16:9 Ready</div>
+          </div>
+        </div>
+
+        <!-- App Layout -->
+        <main class="app-layout">
+
+          <!-- ══ LEFT: Form ══ -->
+          <section class="form-col">
+            <form id="thumbnailForm">
+
+              <!-- Card: Content -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-icon" style="--icon-color:#a78bfa">📝</div>
+                  <div>
+                    <h2 class="card-title">Content</h2>
+                    <p class="card-subtitle">What's your thumbnail about?</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="title">Title <span class="required-badge">Required</span></label>
+                    <input type="text" id="title" name="title"
+                           placeholder="e.g. Top 10 Python Tips for Beginners" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description <span class="opt-badge">Optional</span></label>
+                    <textarea id="description" name="description" rows="3"
+                              placeholder="Add context to help the AI understand your content..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card: Visual Style -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-icon" style="--icon-color:#60a5fa">🎨</div>
+                  <div>
+                    <h2 class="card-title">Visual Style</h2>
+                    <p class="card-subtitle">Define the look and feel</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="style">Style Preset</label>
+                      <select id="style" name="style">
+                        <option value="modern">⚡ Modern</option>
+                        <option value="minimalist">🤍 Minimalist</option>
+                        <option value="bold and dramatic">🔥 Bold &amp; Dramatic</option>
+                        <option value="retro">📻 Retro</option>
+                        <option value="neon cyberpunk">🌆 Neon Cyberpunk</option>
+                        <option value="professional corporate">💼 Professional</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="color_scheme">Color Mood</label>
+                      <select id="color_scheme" name="color_scheme">
+                        <option value="vibrant">🌈 Vibrant</option>
+                        <option value="dark and moody">🌑 Dark &amp; Moody</option>
+                        <option value="light and airy">☀️ Light &amp; Airy</option>
+                        <option value="monochrome">⬛ Monochrome</option>
+                        <option value="warm tones">🔆 Warm Tones</option>
+                        <option value="cool blue tones">🧊 Cool Blue</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Theme Colors <span class="opt-badge">Pick 2–3</span></label>
+                    <div class="color-swatches">
+                      <div class="color-swatch-item">
+                        <div class="swatch-preview" id="swatch_preview_0" style="background:#7c3aed"></div>
+                        <div class="swatch-inputs">
+                          <span class="swatch-label">Primary</span>
+                          <div class="color-row">
+                            <input type="color" class="color-picker" id="color_picker_0" value="#7c3aed" />
+                            <input type="text" class="color-hex" id="color_hex_0" placeholder="#7c3aed" maxlength="7" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="color-swatch-item">
+                        <div class="swatch-preview" id="swatch_preview_1" style="background:#2563eb"></div>
+                        <div class="swatch-inputs">
+                          <span class="swatch-label">Secondary</span>
+                          <div class="color-row">
+                            <input type="color" class="color-picker" id="color_picker_1" value="#2563eb" />
+                            <input type="text" class="color-hex" id="color_hex_1" placeholder="#2563eb" maxlength="7" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="color-swatch-item">
+                        <div class="swatch-preview" id="swatch_preview_2" style="background:#f59e0b"></div>
+                        <div class="swatch-inputs">
+                          <span class="swatch-label">Accent</span>
+                          <div class="color-row">
+                            <input type="color" class="color-picker" id="color_picker_2" value="#f59e0b" />
+                            <input type="text" class="color-hex" id="color_hex_2" placeholder="#f59e0b" maxlength="7" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card: Branding & Assets -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-icon" style="--icon-color:#34d399">🏷️</div>
+                  <div>
+                    <h2 class="card-title">Branding &amp; Assets</h2>
+                    <p class="card-subtitle">Logo, brand name, reference image</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="brand_name">Brand Name <span class="opt-badge">Optional</span></label>
+                    <input type="text" id="brand_name" name="brand_name"
+                           placeholder="e.g. TechWithAnita" />
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Logo <span class="opt-badge">Optional</span></label>
+                      <div class="upload-area" id="uploadArea">
+                        <input type="file" id="logo" name="logo" accept="image/*" />
+                        <div class="upload-inner">
+                          <span class="upload-icon">🖼</span>
+                          <span id="uploadLabel">Upload Logo</span>
+                        </div>
+                      </div>
+                      <div id="logoPreviewWrap" class="asset-preview hidden">
+                        <img id="logoPreview" src="" alt="Logo" />
+                        <button type="button" id="removeLogoBtn" class="remove-btn">✕</button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Reference Image <span class="opt-badge">Optional</span></label>
+                      <div class="upload-area" id="refUploadArea">
+                        <input type="file" id="reference_image" name="reference_image" accept="image/*" />
+                        <div class="upload-inner">
+                          <span class="upload-icon">📌</span>
+                          <span id="refUploadLabel">Style Reference</span>
+                        </div>
+                      </div>
+                      <div id="refPreviewWrap" class="asset-preview hidden">
+                        <img id="refPreview" src="" alt="Reference" />
+                        <button type="button" id="removeRefBtn" class="remove-btn">✕</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" id="generateBtn" class="btn-generate">
+                <span id="btnText"><span class="btn-sparkle">✦</span> Generate Thumbnail</span>
+                <span id="btnLoader" class="hidden"><span class="spinner"></span> Generating...</span>
+              </button>
+            </form>
+          </section>
+
+          <!-- ══ RIGHT: Preview ══ -->
+          <aside class="preview-col">
+            <div class="preview-panel">
+              <div class="panel-header">
+                <span class="panel-title">Preview</span>
+                <span class="panel-live-badge">Live</span>
+              </div>
+
+              <div id="errorBox" class="error-box hidden"></div>
+
+              <div id="previewPlaceholder" class="preview-placeholder">
+                <div class="placeholder-art">
+                  <div class="placeholder-lines">
+                    <div class="ph-line ph-long"></div>
+                    <div class="ph-line ph-short"></div>
+                    <div class="ph-line ph-mid"></div>
+                  </div>
+                  <div class="placeholder-icon">✦</div>
+                </div>
+                <p>Your AI-generated thumbnail<br/>will appear here</p>
+              </div>
+
+              <div id="previewBox" class="preview-box hidden">
+                <div class="canvas-wrapper" id="canvasWrapper">
+                  <canvas id="editorCanvas"></canvas>
+                  <!-- shown only when no logo uploaded -->
+                  <img id="previewImage" src="" alt="Generated Thumbnail" class="hidden" />
+                </div>
+
+                <!-- Editor toolbar (visible only when logo is active) -->
+                <div id="editorToolbar" class="editor-toolbar hidden">
+                  <span class="toolbar-hint">🖱 Drag logo · ↔ Corner handles to resize</span>
+                  <div class="toolbar-actions">
+                    <button type="button" id="resetLogoBtn" class="toolbar-btn">↺ Reset</button>
+                    <button type="button" id="removeLogoEditorBtn" class="toolbar-btn danger">✕ Remove Logo</button>
+                  </div>
+                </div>
+
+                <div class="preview-actions">
+                  <button id="downloadBtn" class="btn-download">⬇ Download</button>
+                </div>
+              </div>
+
+              <div id="editSection" class="edit-section hidden">
+                <div class="edit-header">
+                  <span class="edit-title">✏️ Edit Thumbnail</span>
+                  <span class="edit-hint">Describe changes</span>
+                </div>
+                <textarea id="editPrompt" rows="2"
+                  placeholder="e.g. Make the title bolder, change background to dark navy..."></textarea>
+                <button id="editBtn" type="button" class="btn-edit">
+                  <span id="editBtnText">✦ Apply Edit</span>
+                  <span id="editBtnLoader" class="hidden"><span class="spinner"></span> Applying...</span>
+                </button>
+              </div>
+            </div>
+          </aside>
+
+        </main>
+      </div><!-- /page-content -->
+    </div><!-- /main-area -->
+  </div><!-- /shell -->
+
+  <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
