@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}ThumbAI — Editor{% endblock %}
+{% block nav_templates %}active{% endblock %}
+{% block page_title %}Editor{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/editor-page.css') }}" />
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="editor-layout">
+
+  <!-- ══ LEFT: Tool Panel ══ -->
+  <div class="tool-panel">
+
+    <!-- Templates -->
+    <div class="tool-section">
+      <div class="tool-section-title">Templates</div>
+      <div class="template-mini-grid">
+        <button data-template="blank" class="tpl-mini active" title="Blank">✦</button>
+        <button data-template="youtube" class="tpl-mini" title="YouTube">▶</button>
+        <button data-template="gaming" class="tpl-mini" title="Gaming">🎮</button>
+        <button data-template="tutorial" class="tpl-mini" title="Tutorial">📖</button>
+        <button data-template="podcast" class="tpl-mini" title="Podcast">🎙</button>
+        <button data-template="minimal" class="tpl-mini" title="Minimal">◻</button>
+      </div>
+    </div>
+
+    <!-- Add Elements -->
+    <div class="tool-section">
+      <div class="tool-section-title">Add Elements</div>
+      <button class="tool-btn" id="addTextBtn">
+        <span class="tool-btn-icon">T</span>
+        <span>Text</span>
+      </button>
+      <div class="tool-subsection">
+        <span class="tool-sub-label">Shapes</span>
+        <div class="shape-grid">
+          <button data-shape="rect" class="shape-btn" title="Rectangle">▬</button>
+          <button data-shape="circle" class="shape-btn" title="Circle">●</button>
+          <button data-shape="triangle" class="shape-btn" title="Triangle">▲</button>
+          <button data-shape="line" class="shape-btn" title="Line">━</button>
+          <button data-shape="star" class="shape-btn" title="Star">★</button>
+        </div>
+      </div>
+      <button class="tool-btn" id="addImageBtn">
+        <span class="tool-btn-icon">🖼</span>
+        <span>Upload Image</span>
+      </button>
+      <input type="file" id="imageUploadInput" accept="image/*" class="hidden" />
+    </div>
+
+    <!-- AI Elements -->
+    <div class="tool-section ai-section">
+      <div class="tool-section-title">
+        <span>AI Elements</span>
+        <span class="ai-badge">✦ AI</span>
+      </div>
+      <div class="ai-prompt-box">
+        <input type="text" id="aiElementPrompt" class="ai-input" placeholder="e.g. cartoon rocket, fire emoji, golden trophy..." />
+        <select id="aiElementStyle" class="ai-style-select">
+          <option value="3d render">3D Render</option>
+          <option value="cartoon illustration">Cartoon</option>
+          <option value="flat icon">Flat Icon</option>
+          <option value="realistic photo">Realistic</option>
+          <option value="pixel art">Pixel Art</option>
+          <option value="sticker">Sticker</option>
+          <option value="emoji style">Emoji</option>
+          <option value="neon glowing">Neon Glow</option>
+        </select>
+        <button class="ai-generate-btn" id="aiGenerateBtn">
+          <span id="aiGenText">✦ Generate</span>
+          <span id="aiGenLoader" class="hidden"><span class="spinner"></span></span>
+        </button>
+      </div>
+      <div id="aiElementError" class="ai-error hidden"></div>
+      <div class="ai-quick-prompts">
+        <button class="ai-chip" data-prompt="fire flames">🔥 Fire</button>
+        <button class="ai-chip" data-prompt="golden crown">👑 Crown</button>
+        <button class="ai-chip" data-prompt="lightning bolt">⚡ Lightning</button>
+        <button class="ai-chip" data-prompt="thumbs up hand">👍 Thumbs Up</button>
+        <button class="ai-chip" data-prompt="explosion effect">💥 Explosion</button>
+        <button class="ai-chip" data-prompt="arrow pointing right">➡ Arrow</button>
+        <button class="ai-chip" data-prompt="star burst">⭐ Star</button>
+        <button class="ai-chip" data-prompt="speech bubble">💬 Bubble</button>
+      </div>
+      <div id="aiGeneratedElements" class="ai-generated-grid"></div>
+    </div>
+
+    <!-- Background -->
+    <div class="tool-section">
+      <div class="tool-section-title">Background</div>
+      <div class="bg-controls">
+        <div class="bg-color-row">
+          <input type="color" id="bgColorPicker" value="#1a1a2e" />
+          <span class="bg-label">Color</span>
+        </div>
+        <button class="tool-btn" id="bgImageBtn">
+          <span class="tool-btn-icon">📷</span>
+          <span>Image</span>
+        </button>
+        <input type="file" id="bgImageInput" accept="image/*" class="hidden" />
+      </div>
+    </div>
+
+    <!-- Canvas Size -->
+    <div class="tool-section">
+      <div class="tool-section-title">Canvas Size</div>
+      <select id="canvasSize" class="tool-select">
+        <option value="1280x720" selected>16:9 YouTube (1280×720)</option>
+        <option value="1080x1920">9:16 Shorts (1080×1920)</option>
+        <option value="1080x1080">1:1 Instagram (1080×1080)</option>
+        <option value="1200x628">Facebook (1200×628)</option>
+        <option value="1500x500">Twitter Banner (1500×500)</option>
+        <option value="1920x1080">Full HD (1920×1080)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ══ CENTER: Canvas ══ -->
+  <div class="canvas-area">
+    <!-- Top toolbar -->
+    <div class="canvas-toolbar">
+      <div class="toolbar-left">
+        <button class="tb-btn" id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+        <button class="tb-btn" id="redoBtn" title="Redo (Ctrl+Shift+Z)">↷</button>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" id="duplicateBtn" title="Duplicate (Ctrl+D)">⧉</button>
+        <button class="tb-btn danger" id="deleteBtn" title="Delete (Del)">🗑</button>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" id="moveUpBtn" title="Bring Forward">↑</button>
+        <button class="tb-btn" id="moveDownBtn" title="Send Backward">↓</button>
+      </div>
+      <div class="toolbar-right">
+        <button class="tb-btn" id="clearBtn" title="Clear all">Clear</button>
+        <button class="tb-btn primary" id="exportBtn" title="Download PNG">⬇ Export</button>
+      </div>
+    </div>
+
+    <!-- Canvas wrapper -->
+    <div class="canvas-scroll">
+      <div class="canvas-container">
+        <canvas id="editorCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT: Properties & Layers ══ -->
+  <div class="right-panel">
+    <!-- Properties -->
+    <div class="panel-block">
+      <div class="panel-block-header">Properties</div>
+      <div class="panel-block-body" id="propPanel">
+        <div class="prop-empty">Select an element to edit its properties</div>
+      </div>
+    </div>
+
+    <!-- Layers -->
+    <div class="panel-block">
+      <div class="panel-block-header">Layers</div>
+      <div class="panel-block-body layers-body" id="layersList">
+        <div class="layer-empty">No layers yet</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/canvas-editor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/template-editor.js') }}"></script>
+{% endblock %}

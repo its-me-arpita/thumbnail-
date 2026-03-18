@@ -31,8 +31,7 @@ class ThumbnailEditor {
       const img = new Image();
       img.onload = () => {
         this.bg = img;
-        // Canvas sized to 16:9 matching container width
-        this._resize16x9();
+        this._resizeToImage();
         this._draw();
         resolve();
       };
@@ -74,11 +73,12 @@ class ThumbnailEditor {
 
   // ── Internal rendering ───────────────────────────────────────────────────────
 
-  _resize16x9() {
+  _resizeToImage() {
     const container = this.canvas.parentElement;
     const w = container ? container.clientWidth : 800;
+    const ratio = this.bg ? (this.bg.naturalHeight / this.bg.naturalWidth) : 9 / 16;
     this.canvas.width  = w;
-    this.canvas.height = Math.round(w * 9 / 16);
+    this.canvas.height = Math.round(w * ratio);
   }
 
   _draw(showHandles = true) {
@@ -193,7 +193,7 @@ class ThumbnailEditor {
 
     // Redraw on window resize
     window.addEventListener('resize', () => {
-      if (this.bg) { this._resize16x9(); this._draw(); }
+      if (this.bg) { this._resizeToImage(); this._draw(); }
     });
   }
 

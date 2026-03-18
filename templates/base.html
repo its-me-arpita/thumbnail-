@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}ThumbAI — Studio{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ═══════════════════ SHELL ═══════════════════ -->
+  <div class="shell">
+
+    <!-- ── SIDEBAR ─────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">✦</div>
+        <div class="logo-text">
+          <span class="logo-name">ThumbAI</span>
+          <span class="logo-tag">Studio</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Workspace</div>
+        <a href="/" class="nav-item {% block nav_generator %}{% endblock %}" data-page="generator">
+          <span class="nav-item-icon">🎨</span>
+          <span class="nav-item-label">Generator</span>
+          <span class="nav-item-badge new-badge">New</span>
+        </a>
+        <a href="/history" class="nav-item {% block nav_history %}{% endblock %}" data-page="history">
+          <span class="nav-item-icon">🕐</span>
+          <span class="nav-item-label">History</span>
+        </a>
+        <a href="/templates" class="nav-item {% block nav_templates %}{% endblock %}" data-page="templates">
+          <span class="nav-item-icon">📐</span>
+          <span class="nav-item-label">Templates</span>
+          <span class="nav-item-badge new-badge">New</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="batch">
+          <span class="nav-item-icon">⚡</span>
+          <span class="nav-item-label">Batch Generate</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="nav-section-label">Account</div>
+        <a href="#" class="nav-item disabled" data-page="brand-kit">
+          <span class="nav-item-icon">🏷️</span>
+          <span class="nav-item-label">Brand Kit</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+        <a href="#" class="nav-item disabled" data-page="settings">
+          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-label">Settings</span>
+          <span class="nav-item-badge soon-badge">Soon</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ai-status">
+          <span class="status-dot"></span>
+          <div class="ai-status-text">
+            <span class="ai-model">Gemini AI</span>
+            <span class="ai-state">Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN AREA ──────────────────────────────── -->
+    <div class="main-area">
+
+      <!-- Top Header -->
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </button>
+
+        <div class="topbar-breadcrumb">
+          <span class="breadcrumb-root">ThumbAI</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current" id="pageTitle">{% block page_title %}Dashboard{% endblock %}</span>
+        </div>
+
+        <div class="topbar-right">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
+          </button>
+          <div class="topbar-avatar">A</div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        {% block content %}{% endblock %}
+      </div>
+
+      <!-- Footer -->
+      {% block footer %}
+      <footer class="site-footer">
+        <span class="footer-text">ThumbAI Studio &copy; 2025 &mdash; Powered by Gemini AI</span>
+      </footer>
+      {% endblock %}
+
+    </div><!-- /main-area -->
+  </div><!-- /shell -->
+
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

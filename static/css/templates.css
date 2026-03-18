@@ -1,0 +1,107 @@
+/* ═══════════════════════════════════════════════
+   ThumbAI — Templates Listing Page
+   ═══════════════════════════════════════════════ */
+
+.page-hero {
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: 1rem; margin-bottom: 1.8rem;
+  padding: 1.5rem 1.8rem;
+  background: linear-gradient(135deg,
+    rgba(124,58,237,0.08) 0%,
+    rgba(167,139,250,0.06) 50%,
+    rgba(237,233,254,0.8) 100%);
+  border: 1px solid rgba(124,58,237,0.15);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(124,58,237,0.06);
+}
+
+.page-hero-title {
+  font-size: 1.7rem; font-weight: 800;
+  color: var(--primary-dark);
+  letter-spacing: -0.5px; margin-bottom: 0.2rem;
+}
+.page-hero-sub { font-size: 0.85rem; color: var(--text2); }
+
+/* ── Templates Grid ──────────────────────────── */
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.4rem;
+}
+
+.template-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+.template-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.template-thumb {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+}
+
+.blank-thumb {
+  background: var(--bg3);
+  display: grid; place-items: center;
+  border-bottom: 1px dashed var(--border);
+}
+.blank-plus {
+  font-size: 2.5rem;
+  color: var(--primary-light);
+  opacity: 0.5;
+}
+.blank-card:hover .blank-plus { opacity: 1; }
+
+.template-info { padding: 0.8rem 1rem; }
+.template-name { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+.template-desc { font-size: 0.72rem; color: var(--text3); }
+
+/* ── Template preview elements ───────────────── */
+.tpl-preview-youtube,
+.tpl-preview-gaming,
+.tpl-preview-tutorial,
+.tpl-preview-podcast,
+.tpl-preview-minimal {
+  position: absolute; inset: 0;
+}
+
+.tpl-title {
+  position: absolute;
+  font-size: 0.72rem; font-weight: 800; color: #fff;
+  line-height: 1.2;
+}
+.tpl-sub {
+  position: absolute;
+  font-size: 0.45rem; font-weight: 500; color: #ccc;
+}
+.tpl-badge {
+  position: absolute;
+  font-size: 0.38rem; font-weight: 700; color: #fff;
+  padding: 2px 6px; border-radius: 4px;
+}
+
+/* ── Dark mode ───────────────────────────────── */
+[data-theme="dark"] .page-hero {
+  background: linear-gradient(135deg,
+    rgba(124,58,237,0.15) 0%,
+    rgba(167,139,250,0.08) 50%,
+    rgba(22,19,46,0.8) 100%);
+  border-color: rgba(124,58,237,0.25);
+}
+[data-theme="dark"] .page-hero-title { color: var(--primary-light); }
+
+@media (max-width: 520px) {
+  .templates-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+}

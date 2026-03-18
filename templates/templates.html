@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}ThumbAI — Templates{% endblock %}
+{% block nav_templates %}active{% endblock %}
+{% block page_title %}Templates{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/templates.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="page-hero-left">
+    <h1 class="page-hero-title">Thumbnail Templates</h1>
+    <p class="page-hero-sub">Start from a template or create from scratch — edit like Canva</p>
+  </div>
+</div>
+
+<div class="templates-grid">
+  <!-- Blank -->
+  <a href="/editor" class="template-card blank-card">
+    <div class="template-thumb blank-thumb">
+      <span class="blank-plus">+</span>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Blank Canvas</div>
+      <div class="template-desc">Start from scratch</div>
+    </div>
+  </a>
+
+  <!-- YouTube -->
+  <a href="/editor?tpl=youtube" class="template-card">
+    <div class="template-thumb" style="background: linear-gradient(135deg, #1a0533, #0f0f23);">
+      <div class="tpl-preview-youtube">
+        <div class="tpl-bar" style="background:#7c3aed; position:absolute; bottom:0; left:0; right:0; height:30%;opacity:0.85;"></div>
+        <span class="tpl-title" style="top:25%;left:8%;">YOUR TITLE</span>
+        <span class="tpl-sub" style="color:#a78bfa;top:48%;left:8%;font-size:0.5rem;">Subtitle text</span>
+        <span class="tpl-badge" style="background:#ef4444;bottom:12%;left:8%;">WATCH NOW</span>
+      </div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">YouTube Bold</div>
+      <div class="template-desc">Eye-catching YouTube thumbnail</div>
+    </div>
+  </a>
+
+  <!-- Gaming -->
+  <a href="/editor?tpl=gaming" class="template-card">
+    <div class="template-thumb" style="background: #1a0a2e;">
+      <div class="tpl-preview-gaming">
+        <div style="border:2px solid #f59e0b;border-radius:8px;position:absolute;inset:6%;"></div>
+        <span class="tpl-title" style="color:#f59e0b;top:20%;left:12%;">EPIC GAMING</span>
+        <span class="tpl-title" style="top:42%;left:12%;font-size:0.65rem;">MOMENTS</span>
+      </div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Gaming</div>
+      <div class="template-desc">Bold gaming content style</div>
+    </div>
+  </a>
+
+  <!-- Tutorial -->
+  <a href="/editor?tpl=tutorial" class="template-card">
+    <div class="template-thumb" style="background: #f8fafc;">
+      <div class="tpl-preview-tutorial">
+        <div style="background:#7c3aed;position:absolute;left:0;top:0;bottom:0;width:40%;"></div>
+        <span class="tpl-title" style="color:#fff;top:30%;left:5%;font-size:0.55rem;">HOW TO</span>
+        <span class="tpl-title" style="color:#1e293b;top:30%;left:45%;font-size:0.55rem;">TUTORIAL</span>
+      </div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Tutorial</div>
+      <div class="template-desc">Clean tutorial/how-to layout</div>
+    </div>
+  </a>
+
+  <!-- Podcast -->
+  <a href="/editor?tpl=podcast" class="template-card">
+    <div class="template-thumb" style="background: #18181b;">
+      <div class="tpl-preview-podcast">
+        <div style="background:#27272a;border-radius:50%;width:35%;aspect-ratio:1;position:absolute;left:8%;top:20%;display:grid;place-items:center;font-size:1.2rem;">🎙</div>
+        <span class="tpl-title" style="top:28%;left:50%;font-size:0.55rem;">THE PODCAST</span>
+        <span class="tpl-sub" style="top:48%;left:50%;color:#a1a1aa;">Episode Title</span>
+        <span class="tpl-badge" style="background:#ef4444;top:62%;left:50%;">NEW EPISODE</span>
+      </div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Podcast</div>
+      <div class="template-desc">Podcast episode thumbnail</div>
+    </div>
+  </a>
+
+  <!-- Minimal -->
+  <a href="/editor?tpl=minimal" class="template-card">
+    <div class="template-thumb" style="background: #fafaf9;">
+      <div class="tpl-preview-minimal">
+        <span class="tpl-title" style="color:#1c1917;top:28%;left:10%;font-size:0.7rem;">Clean &amp;</span>
+        <span class="tpl-title" style="color:#1c1917;top:45%;left:10%;font-size:0.7rem;">Simple</span>
+        <div style="background:#7c3aed;height:3px;width:25%;position:absolute;top:65%;left:10%;border-radius:2px;"></div>
+        <span class="tpl-sub" style="color:#78716c;top:72%;left:10%;">A minimalist approach</span>
+      </div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Minimal</div>
+      <div class="template-desc">Clean minimalist design</div>
+    </div>
+  </a>
+</div>
+{% endblock %}

@@ -39,17 +39,11 @@ const NUM_COLORS = 3;
 for (let i = 0; i < NUM_COLORS; i++) {
   const picker = document.getElementById(`color_picker_${i}`);
   const hex = document.getElementById(`color_hex_${i}`);
-  const preview = document.getElementById(`swatch_preview_${i}`);
   hex.value = picker.value;
-  const sync = () => {
-    hex.value = picker.value;
-    if (preview) preview.style.background = picker.value;
-  };
-  picker.addEventListener('input', sync);
+  picker.addEventListener('input', () => { hex.value = picker.value; });
   hex.addEventListener('input', () => {
     if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) {
       picker.value = hex.value;
-      if (preview) preview.style.background = hex.value;
     }
   });
 }
@@ -122,7 +116,7 @@ async function readFileAsBase64(file) {
   });
 }
 
-function showResult(data) {
+function showResult(data, promptSettings) {
   const mimeType = data.mime_type || 'image/png';
   const src = `data:${mimeType};base64,${data.image}`;
 
@@ -130,9 +124,7 @@ function showResult(data) {
   previewBox.classList.remove('hidden');
   editSection.classList.remove('hidden');
 
-  // Always load thumbnail into the canvas editor
   editor.loadBackground(src).then(() => {
-    // If logo was uploaded, load it into the editor as a draggable layer
     const logoFile = logoInput.files[0];
     if (logoFile) {
       const reader = new FileReader();
@@ -146,9 +138,26 @@ function showResult(data) {
     }
   });
 
-  // Store raw src for edit endpoint
   downloadBtn.dataset.src  = src;
   downloadBtn.dataset.mime = mimeType;
+
+  // Auto-save to history
+  saveToHistory(data, promptSettings);
+}
+
+function saveToHistory(data, promptSettings) {
+  const title = document.getElementById('title').value.trim() || 'Untitled';
+  fetch('/api/history', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title: title,
+      prompt_settings: promptSettings || {},
+      image: data.image,
+      mime_type: data.mime_type || 'image/png',
+      model: data.model || '',
+    }),
+  }).catch(() => {});
 }
 
 // ── Generate ─────────────────────────────────────────────────────────────────
@@ -178,7 +187,7 @@ form.addEventListener('submit', async (e) => {
     const response = await fetch('/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const data = await response.json();
     if (!response.ok || data.error) { showError(data.error || 'Something went wrong.'); return; }
-    showResult(data);
+    showResult(data, { style: payload.style, color_scheme: payload.color_scheme, aspect_ratio: payload.aspect_ratio });
   } catch (err) {
     showError('Network error: ' + err.message);
   } finally {
@@ -208,7 +217,7 @@ editBtn.addEventListener('click', async () => {
     });
     const data = await response.json();
     if (!response.ok || data.error) { showError(data.error || 'Edit failed.'); return; }
-    showResult(data);
+    showResult(data, { style: 'edited' });
     editPrompt.value = '';
   } catch (err) {
     showError('Network error: ' + err.message);
@@ -220,7 +229,6 @@ editBtn.addEventListener('click', async () => {
 // ── Download ──────────────────────────────────────────────────────────────────
 downloadBtn.addEventListener('click', () => {
   const title = document.getElementById('title').value.trim() || 'thumbnail';
-  // Export from canvas (includes positioned logo if present)
   const src = editor.bg ? editor.export() : downloadBtn.dataset.src;
   if (!src) return;
   const a = document.createElement('a');
@@ -248,54 +256,4 @@ if (removeLogoEditorBtn) {
     editor.removeLogo();
     editorToolbar.classList.add('hidden');
   });
-}
-
-// ── Sidebar toggle (mobile) ───────────────────────────────────────────────────
-const sidebar = document.getElementById('sidebar');
-const sidebarToggle = document.getElementById('sidebarToggle');
-if (sidebarToggle && sidebar) {
-  sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-  // Close when clicking outside on mobile
-  document.addEventListener('click', (e) => {
-    if (sidebar.classList.contains('open') &&
-        !sidebar.contains(e.target) &&
-        !sidebarToggle.contains(e.target)) {
-      sidebar.classList.remove('open');
-    }
-  });
-}
-
-// Disabled nav items — show coming soon toast
-document.querySelectorAll('.nav-item.disabled').forEach(item => {
-  item.addEventListener('click', (e) => {
-    e.preventDefault();
-    const label = item.querySelector('.nav-item-label')?.textContent || 'Feature';
-    showToast(`${label} — Coming Soon!`);
-  });
-});
-
-function showToast(msg) {
-  let t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = `
-      position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(20px);
-      background:rgba(20,20,40,0.95); border:1px solid rgba(255,255,255,0.12);
-      color:#f0eeff; padding:0.6rem 1.3rem; border-radius:30px;
-      font-size:0.82rem; font-weight:500; font-family:Inter,sans-serif;
-      backdrop-filter:blur(20px); z-index:9999;
-      opacity:0; transition:opacity 0.2s, transform 0.2s;
-      pointer-events:none;
-    `;
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = '1';
-  t.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(-50%) translateY(10px)';
-  }, 2200);
 }

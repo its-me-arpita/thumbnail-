@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}ThumbAI — History{% endblock %}
+{% block nav_history %}active{% endblock %}
+{% block page_title %}History{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-left">
+    <h1 class="page-hero-title">Generation History</h1>
+    <p class="page-hero-sub">Browse and manage your previously generated thumbnails</p>
+  </div>
+  <div class="page-hero-actions">
+    <span class="history-count" id="historyCount">0 thumbnails</span>
+    <button class="btn-clear" id="clearAllBtn" title="Clear all history">🗑 Clear All</button>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div id="emptyState" class="empty-state">
+  <div class="empty-icon">🕐</div>
+  <h2>No thumbnails yet</h2>
+  <p>Generated thumbnails will appear here automatically.</p>
+  <a href="/" class="btn-go-generate">🎨 Go to Generator</a>
+</div>
+
+<!-- History Grid -->
+<div id="historyGrid" class="history-grid hidden"></div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal hidden">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">Thumbnail</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <img id="modalImage" src="" alt="Thumbnail" />
+    </div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-download" id="modalDownload">⬇ Download</button>
+      <button class="btn-modal-reuse" id="modalReuse">🎨 Use as Reference</button>
+      <button class="btn-modal-delete" id="modalDelete">🗑 Delete</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}
