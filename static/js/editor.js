@@ -64,11 +64,43 @@ class ThumbnailEditor {
     this._draw();
   }
 
-  /** Export merged canvas as PNG data-URL */
+  /** Export merged canvas as PNG data-URL at full original resolution */
   export() {
-    // Draw final frame without selection handles
-    this._draw(false);
-    return this.canvas.toDataURL('image/png');
+    const { canvas, ctx } = this;
+
+    // Save current display dimensions
+    const displayW = canvas.width;
+    const displayH = canvas.height;
+
+    // Use original image resolution for export (fall back to 1280x720)
+    const exportW = this.bg ? this.bg.naturalWidth  : 1280;
+    const exportH = this.bg ? this.bg.naturalHeight : 720;
+
+    // Scale factor from display size to full resolution
+    const scaleX = exportW / displayW;
+    const scaleY = exportH / displayH;
+
+    // Resize canvas to full resolution
+    canvas.width  = exportW;
+    canvas.height = exportH;
+
+    // Draw background at full resolution
+    if (this.bg) ctx.drawImage(this.bg, 0, 0, exportW, exportH);
+
+    // Draw logo at scaled position/size
+    if (this.logo) {
+      const { x, y, w, h } = this.layer;
+      ctx.drawImage(this.logo, x * scaleX, y * scaleY, w * scaleX, h * scaleY);
+    }
+
+    const dataURL = canvas.toDataURL('image/png');
+
+    // Restore display dimensions and redraw
+    canvas.width  = displayW;
+    canvas.height = displayH;
+    this._draw(true);
+
+    return dataURL;
   }
 
   // ── Internal rendering ───────────────────────────────────────────────────────
