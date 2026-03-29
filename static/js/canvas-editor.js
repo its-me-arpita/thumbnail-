@@ -668,11 +668,68 @@ class CanvasEditor {
     const { x, y } = this._canvasPos(e);
     const hit = this._hitLayer(x, y);
     if (hit && hit.type === 'text') {
-      const newText = prompt('Edit text:', hit.text);
-      if (newText !== null) {
-        this.updateLayer(hit.id, { text: newText });
-      }
+      this.selectedId = hit.id;
+      this.render();
+      this._notify();
+      this._startInlineEdit(hit);
     }
+  }
+
+  /** Inline text editing overlay on canvas */
+  _startInlineEdit(layer) {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = rect.width / this.canvas.width;
+    const scaleY = rect.height / this.canvas.height;
+
+    const textarea = document.createElement('textarea');
+    textarea.value = layer.text;
+    textarea.style.cssText = `
+      position: fixed;
+      left: ${rect.left + layer.x * scaleX}px;
+      top: ${rect.top + layer.y * scaleY}px;
+      width: ${layer.w * scaleX}px;
+      height: ${layer.h * scaleY}px;
+      font-size: ${layer.fontSize * scaleX}px;
+      font-family: ${layer.fontFamily || 'Inter'};
+      font-weight: ${layer.fontWeight || '800'};
+      color: ${layer.color || '#ffffff'};
+      text-align: ${layer.align || 'center'};
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #7c3aed;
+      border-radius: 4px;
+      padding: 4px 8px;
+      outline: none;
+      resize: none;
+      z-index: 10000;
+      line-height: 1.25;
+      box-sizing: border-box;
+      overflow: hidden;
+    `;
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    const commit = () => {
+      const newText = textarea.value;
+      if (newText !== layer.text) {
+        this.updateLayer(layer.id, { text: newText });
+      }
+      if (textarea.parentNode) textarea.remove();
+    };
+
+    textarea.addEventListener('blur', commit);
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        textarea.blur();
+      }
+      if (e.key === 'Escape') {
+        textarea.value = layer.text; // revert
+        textarea.blur();
+      }
+      e.stopPropagation(); // prevent canvas shortcuts
+    });
   }
 
   // ── History (undo/redo) ───────────────────────────────────────────────────

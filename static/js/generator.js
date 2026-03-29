@@ -12,6 +12,7 @@ const editBtn = document.getElementById('editBtn');
 const editBtnText = document.getElementById('editBtnText');
 const editBtnLoader = document.getElementById('editBtnLoader');
 const editPrompt = document.getElementById('editPrompt');
+const previewLoading = document.getElementById('previewLoading');
 
 // Editor canvas
 const editorCanvas  = document.getElementById('editorCanvas');
@@ -166,6 +167,12 @@ form.addEventListener('submit', async (e) => {
   hideError();
   setLoading(true);
 
+  // Show loading overlay in the preview area
+  previewPlaceholder.classList.add('hidden');
+  previewBox.classList.add('hidden');
+  editSection.classList.add('hidden');
+  previewLoading.classList.remove('hidden');
+
   const payload = {
     title: document.getElementById('title').value.trim(),
     description: document.getElementById('description').value.trim(),
@@ -186,9 +193,12 @@ form.addEventListener('submit', async (e) => {
   try {
     const response = await fetch('/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const data = await response.json();
-    if (!response.ok || data.error) { showError(data.error || 'Something went wrong.'); return; }
+    if (!response.ok || data.error) { previewLoading.classList.add('hidden'); previewPlaceholder.classList.remove('hidden'); showError(data.error || 'Something went wrong.'); return; }
+    previewLoading.classList.add('hidden');
     showResult(data, { style: payload.style, color_scheme: payload.color_scheme, aspect_ratio: payload.aspect_ratio });
   } catch (err) {
+    previewLoading.classList.add('hidden');
+    previewPlaceholder.classList.remove('hidden');
     showError('Network error: ' + err.message);
   } finally {
     setLoading(false);
@@ -206,6 +216,11 @@ editBtn.addEventListener('click', async () => {
   hideError();
   setEditLoading(true);
 
+  // Show loading overlay during edit
+  previewBox.classList.add('hidden');
+  previewLoading.querySelector('.loading-text').textContent = 'Applying your edits...';
+  previewLoading.classList.remove('hidden');
+
   const base64 = currentSrc.split(',')[1];
   const mime = downloadBtn.dataset.mime || 'image/png';
 
@@ -216,12 +231,17 @@ editBtn.addEventListener('click', async () => {
       body: JSON.stringify({ edit_instruction: instruction, base_image: base64, base_mime: mime }),
     });
     const data = await response.json();
-    if (!response.ok || data.error) { showError(data.error || 'Edit failed.'); return; }
+    if (!response.ok || data.error) { previewLoading.classList.add('hidden'); previewBox.classList.remove('hidden'); showError(data.error || 'Edit failed.'); return; }
+    previewLoading.classList.add('hidden');
+    previewLoading.querySelector('.loading-text').textContent = 'Generating your thumbnail...';
     showResult(data, { style: 'edited' });
     editPrompt.value = '';
   } catch (err) {
+    previewLoading.classList.add('hidden');
+    previewBox.classList.remove('hidden');
     showError('Network error: ' + err.message);
   } finally {
+    previewLoading.querySelector('.loading-text').textContent = 'Generating your thumbnail...';
     setEditLoading(false);
   }
 });

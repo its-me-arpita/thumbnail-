@@ -107,6 +107,162 @@ def generate_element():
     return _run_image_generation([prompt], aspect_ratio="1:1")
 
 
+@generate_bp.route("/generate-carousel-prompt", methods=["POST"])
+def generate_carousel_prompt():
+    data = request.get_json()
+    user_prompt = data.get("prompt", "").strip()
+    if not user_prompt:
+        return jsonify({"error": "Prompt is required"}), 400
+
+    slide_count = int(data.get("slide_count", 5))
+    slide_count = max(2, min(slide_count, 10))
+    aspect_ratio = data.get("aspect_ratio", "1:1").strip()
+
+    slides = []
+    errors = []
+
+    for i in range(slide_count):
+        if i == 0:
+            slide_role = "This is the COVER/TITLE slide (slide 1)."
+        elif i == slide_count - 1:
+            slide_role = f"This is the FINAL slide ({i + 1}/{slide_count}) with a call-to-action."
+        else:
+            slide_role = f"This is content slide {i + 1}/{slide_count}."
+
+        prompt = (
+            f"{user_prompt}\n\n"
+            f"Generate slide {i + 1} of {slide_count} for this carousel. "
+            f"{slide_role} "
+            f"Include slide number {i + 1}/{slide_count} subtly. "
+            f"{aspect_ratio} aspect ratio. "
+            f"Keep a consistent visual theme across all slides. "
+            f"Clean design, readable text, no watermarks."
+        )
+
+        generated = False
+        for model_name in get_image_model_candidates():
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=[prompt],
+                    config=types.GenerateContentConfig(
+                        response_modalities=["IMAGE"],
+                        image_config=types.ImageConfig(aspect_ratio=aspect_ratio),
+                    ),
+                )
+                encoded, mime_type = extract_image_part(response)
+                if encoded:
+                    slides.append({
+                        "image": encoded,
+                        "mime_type": mime_type,
+                        "slide_number": i + 1,
+                        "model": model_name,
+                    })
+                    generated = True
+                    break
+            except Exception:
+                continue
+
+        if not generated:
+            errors.append(f"Slide {i + 1} failed to generate")
+
+    if not slides:
+        return jsonify({"error": "Failed to generate any slides. Try again."}), 500
+
+    return jsonify({"slides": slides, "total": len(slides), "errors": errors})
+
+
+@generate_bp.route("/generate-carousel", methods=["POST"])
+def generate_carousel():
+    data = request.get_json()
+    topic = data.get("topic", "").strip()
+    description = data.get("description", "").strip()
+    slide_count = int(data.get("slide_count", 5))
+    platform = data.get("platform", "instagram").strip()
+    style = data.get("style", "modern").strip()
+    color_scheme = data.get("color_scheme", "vibrant").strip()
+    brand_name = data.get("brand_name", "").strip()
+
+    if not topic:
+        return jsonify({"error": "Topic is required"}), 400
+
+    slide_count = max(2, min(slide_count, 10))
+
+    platform_ratios = {
+        "instagram": "1:1",
+        "linkedin": "4:5",
+        "twitter": "16:9",
+    }
+    aspect_ratio = platform_ratios.get(platform, "1:1")
+
+    brand_part = f" Brand name: '{brand_name}'." if brand_name else ""
+
+    slides = []
+    errors = []
+
+    for i in range(slide_count):
+        if i == 0:
+            slide_desc = f"Title/cover slide introducing the topic: '{topic}'."
+        elif i == slide_count - 1:
+            slide_desc = (
+                f"Final/closing slide with a call-to-action (e.g. follow, like, share). "
+                f"Topic: '{topic}'."
+            )
+        else:
+            slide_desc = (
+                f"Content slide {i} of {slide_count - 2} (middle slides). "
+                f"Topic: '{topic}'. "
+                f"Show point/tip number {i} with a key insight or visual."
+            )
+
+        prompt = (
+            f"Create a single carousel slide image for {platform}. "
+            f"{slide_desc} "
+            f"Description: '{description}'. "
+            f"Style: {style}. Color scheme: {color_scheme}.{brand_part} "
+            f"Keep a consistent visual theme across all slides. "
+            f"Include slide number {i + 1}/{slide_count} subtly. "
+            f"{aspect_ratio} aspect ratio. "
+            f"Clean design, readable text, no watermarks."
+        )
+
+        generated = False
+        for model_name in get_image_model_candidates():
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=[prompt],
+                    config=types.GenerateContentConfig(
+                        response_modalities=["IMAGE"],
+                        image_config=types.ImageConfig(aspect_ratio=aspect_ratio),
+                    ),
+                )
+                encoded, mime_type = extract_image_part(response)
+                if encoded:
+                    slides.append({
+                        "image": encoded,
+                        "mime_type": mime_type,
+                        "slide_number": i + 1,
+                        "model": model_name,
+                    })
+                    generated = True
+                    break
+            except Exception:
+                continue
+
+        if not generated:
+            errors.append(f"Slide {i + 1} failed to generate")
+
+    if not slides:
+        return jsonify({"error": "Failed to generate any slides. Try again."}), 500
+
+    return jsonify({
+        "slides": slides,
+        "total": len(slides),
+        "errors": errors,
+    })
+
+
 @generate_bp.route("/edit", methods=["POST"])
 def edit_thumbnail():
     data = request.get_json()

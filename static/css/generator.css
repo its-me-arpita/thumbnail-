@@ -229,6 +229,33 @@ select option { background: var(--bg2); }
 .placeholder-icon { font-size: 1.6rem; color: var(--primary-light); opacity: 0.5; margin-bottom: 18px; }
 .preview-placeholder p { font-size: 0.82rem; color: var(--text3); line-height: 1.6; }
 
+/* ── Preview Loading Overlay ─────────────────── */
+.preview-loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3.5rem 1.5rem; text-align: center;
+}
+
+.loading-content {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+
+.loading-spinner {
+  width: 44px; height: 44px;
+  border: 3.5px solid rgba(124,58,237,0.15);
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-text {
+  font-size: 0.92rem; font-weight: 700; color: var(--text);
+  margin: 0;
+}
+
+.loading-subtext {
+  font-size: 0.75rem; color: var(--text3); margin: 0;
+}
+
 .preview-box { padding: 1.1rem; }
 
 /* ── Canvas editor ───────────────────────────── */

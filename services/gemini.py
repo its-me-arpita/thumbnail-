@@ -8,9 +8,8 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 DEFAULT_IMAGE_MODEL_CANDIDATES = [
-    "gemini-3.1-flash-image-preview",
     "gemini-2.5-flash-image",
-    "gemini-3-pro-image-preview",
+    "gemini-3.1-flash-image-preview",
 ]
 
 

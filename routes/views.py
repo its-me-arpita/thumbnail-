@@ -21,3 +21,8 @@ def templates():
 @views_bp.route("/editor")
 def editor():
     return render_template("editor.html")
+
+
+@views_bp.route("/carousel")
+def carousel():
+    return render_template("carousel.html")

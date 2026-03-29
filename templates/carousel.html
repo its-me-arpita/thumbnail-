@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+
+{% block title %}ThumbAI — Carousel Maker{% endblock %}
+{% block nav_carousel %}active{% endblock %}
+{% block page_title %}Carousel Maker{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-left">
+    <h1 class="page-hero-title">Carousel Maker</h1>
+    <p class="page-hero-sub">Generate multi-slide carousels for Instagram, LinkedIn & more</p>
+  </div>
+  <div class="page-hero-chips">
+    <div class="stat-chip"><span>📱</span> Multi-Slide</div>
+    <div class="stat-chip"><span>🎨</span> AI-Powered</div>
+    <div class="stat-chip"><span>⬇</span> Downloadable</div>
+  </div>
+</div>
+
+<!-- App Layout -->
+<main class="app-layout">
+
+  <!-- ══ LEFT: Form ══ -->
+  <section class="form-col">
+    <form id="carouselForm">
+
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button type="button" class="mode-btn active" data-mode="form">📝 Form</button>
+        <button type="button" class="mode-btn" data-mode="prompt">✨ Prompt</button>
+      </div>
+
+      <!-- Prompt Mode -->
+      <div id="promptMode" class="card hidden">
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color:#7c3aed">✨</div>
+          <div>
+            <h2 class="card-title">Describe Your Carousel</h2>
+            <p class="card-subtitle">Tell AI exactly what you want</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="promptInput">Prompt <span class="required-badge">Required</span></label>
+            <textarea id="promptInput" name="promptInput" rows="5"
+                      placeholder="Be specific! Example: Create an Instagram carousel about 5 morning habits. Each slide should have a dark purple gradient background, large white bold heading, a short description below, and a small icon. Slide 1: Title card. Slide 2: Wake up early. Slide 3: Exercise. Slide 4: Meditate. Slide 5: CTA to follow."></textarea>
+          </div>
+          <div class="prompt-chips">
+            <button type="button" class="prompt-chip" data-prompt="Create an Instagram carousel about top 3 coding tips for beginners. Each slide should have dark background, large neon green heading text, code snippet examples, and modern tech style. Slide 1: Title 'Coding Tips'. Slide 2: Use meaningful variable names. Slide 3: CTA follow for more.">Coding Tips</button>
+            <button type="button" class="prompt-chip" data-prompt="Make a LinkedIn carousel on 3 leadership skills. Each slide: clean white background, navy blue text, professional icons, corporate style. Slide 1: Title card. Slide 2: Communication skill. Slide 3: CTA connect with me.">Leadership</button>
+            <button type="button" class="prompt-chip" data-prompt="Generate an Instagram carousel with 3 healthy breakfast recipes. Colorful food photography style, warm tones, recipe name in bold, ingredients listed. Slide 1: Title 'Healthy Breakfasts'. Slide 2: Overnight oats recipe. Slide 3: CTA save this post.">Recipes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Mode: Content -->
+      <div id="formMode">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color:#7c3aed">📝</div>
+          <div>
+            <h2 class="card-title">Content</h2>
+            <p class="card-subtitle">What's your carousel about?</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="topic">Topic <span class="required-badge">Required</span></label>
+            <input type="text" id="topic" name="topic"
+                   placeholder="e.g. 10 Tips for Better Sleep" />
+          </div>
+          <div class="form-group">
+            <label for="description">Description <span class="opt-badge">Optional</span></label>
+            <textarea id="description" name="description" rows="3"
+                      placeholder="Add context to help the AI create better slides..."></textarea>
+          </div>
+        </div>
+      </div>
+      </div><!-- /formMode -->
+
+      <!-- Card: Carousel Settings (always visible) -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color:#7c3aed">⚙️</div>
+          <div>
+            <h2 class="card-title">Carousel Settings</h2>
+            <p class="card-subtitle">Slides, platform & style</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="slide_count">Number of Slides</label>
+              <select id="slide_count" name="slide_count">
+                <option value="3">3 Slides</option>
+                <option value="5" selected>5 Slides</option>
+                <option value="7">7 Slides</option>
+                <option value="10">10 Slides</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="platform">Platform</label>
+              <select id="platform" name="platform">
+                <option value="instagram">📱 Instagram (1:1)</option>
+                <option value="linkedin">💼 LinkedIn (4:5)</option>
+                <option value="twitter">🐦 Twitter/X (16:9)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="styleRow" class="form-row" style="margin-top: 1rem;">
+            <div class="form-group">
+              <label for="style">Style Preset</label>
+              <select id="style" name="style">
+                <option value="modern">⚡ Modern</option>
+                <option value="minimalist">🤍 Minimalist</option>
+                <option value="bold and dramatic">🔥 Bold & Dramatic</option>
+                <option value="professional corporate">💼 Professional</option>
+                <option value="playful colorful">🎉 Playful</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="color_scheme">Color Mood</label>
+              <select id="color_scheme" name="color_scheme">
+                <option value="vibrant">🌈 Vibrant</option>
+                <option value="dark and moody">🌑 Dark & Moody</option>
+                <option value="light and airy">☀️ Light & Airy</option>
+                <option value="monochrome">⬛ Monochrome</option>
+                <option value="warm tones">🔆 Warm Tones</option>
+                <option value="cool blue tones">🧊 Cool Blue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Branding -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color:#7c3aed">🏷️</div>
+          <div>
+            <h2 class="card-title">Branding</h2>
+            <p class="card-subtitle">Optional brand details</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="brand_name">Brand Name <span class="opt-badge">Optional</span></label>
+            <input type="text" id="brand_name" name="brand_name"
+                   placeholder="e.g. TechWithAnita" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Bulk CSV Upload -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color:#059669">📄</div>
+          <div>
+            <h2 class="card-title">Bulk Upload</h2>
+            <p class="card-subtitle">Generate multiple carousels from CSV</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="csv-upload-area" id="csvDropZone">
+            <input type="file" id="csvInput" accept=".csv" />
+            <div class="csv-upload-inner">
+              <span class="upload-icon">📄</span>
+              <span class="csv-label">Drop CSV here or click to upload</span>
+            </div>
+          </div>
+          <div class="csv-actions">
+            <button type="button" id="csvTemplateBtn" class="btn-small btn-outline">Download CSV Template</button>
+            <span id="csvFileName" class="csv-file-name"></span>
+          </div>
+          <div id="bulkPanel" class="bulk-panel hidden">
+            <div class="bulk-header">
+              <span class="bulk-title">Bulk Generation</span>
+              <button type="button" id="bulkCancelBtn" class="btn-small btn-danger">Cancel</button>
+            </div>
+            <div class="bulk-progress-bar">
+              <div class="bulk-progress-fill" id="bulkProgressFill" style="width:0%"></div>
+            </div>
+            <span class="bulk-status" id="bulkStatus">0 / 0 carousels</span>
+            <div id="bulkResults" class="bulk-results"></div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="generateBtn" class="btn-generate">
+        <span id="btnText"><span class="btn-sparkle">✦</span> Generate Carousel</span>
+        <span id="btnLoader" class="hidden"><span class="spinner"></span> Generating...</span>
+      </button>
+    </form>
+  </section>
+
+  <!-- ══ RIGHT: Preview ══ -->
+  <aside class="preview-col">
+    <div class="preview-panel">
+      <div class="panel-header">
+        <span class="panel-title">Preview</span>
+        <div class="panel-header-actions">
+          <button id="autoPlayBtn" class="panel-action-btn" title="Auto-play slides" disabled>▶</button>
+          <span class="panel-live-badge">Live</span>
+        </div>
+      </div>
+
+      <div id="errorBox" class="error-box hidden"></div>
+
+      <div id="previewPlaceholder" class="preview-placeholder">
+        <div class="placeholder-art">
+          <div class="placeholder-slides">
+            <div class="ph-slide"></div>
+            <div class="ph-slide"></div>
+            <div class="ph-slide"></div>
+          </div>
+          <div class="placeholder-icon">✦</div>
+        </div>
+        <p>Your AI-generated carousel<br/>will appear here</p>
+      </div>
+
+      <div id="previewLoading" class="preview-loading hidden">
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <p class="loading-text">Generating slides...</p>
+          <p class="loading-subtext">This may take a moment</p>
+          <div class="slide-progress">
+            <span id="slideProgress">0</span> / <span id="slideTotalProgress">5</span> slides
+          </div>
+        </div>
+      </div>
+
+      <div id="previewBox" class="preview-box hidden">
+        <!-- Slide viewer -->
+        <div class="slide-viewer">
+          <button id="prevSlide" class="slide-nav-btn prev" disabled>&lsaquo;</button>
+          <div class="slide-display" id="slideDisplay">
+            <img id="slideImage" src="" alt="Carousel Slide" />
+          </div>
+          <button id="nextSlide" class="slide-nav-btn next" disabled>&rsaquo;</button>
+        </div>
+
+        <div class="slide-indicator">
+          <span id="slideCounter">1 / 1</span>
+        </div>
+
+        <!-- Slide thumbnails (draggable) -->
+        <div class="slide-thumbnails" id="slideThumbnails"></div>
+
+        <!-- Slide action bar -->
+        <div class="slide-actions-bar">
+          <button id="editSlideBtn" class="slide-action-btn" title="Edit this slide">✏️ Edit</button>
+          <button id="regenSlideBtn" class="slide-action-btn" title="Regenerate this slide">🔄 Regen</button>
+          <button id="deleteSlideBtn" class="slide-action-btn danger" title="Delete this slide">🗑 Delete</button>
+          <button id="copySlideBtn" class="slide-action-btn" title="Copy to clipboard">📋 Copy</button>
+        </div>
+
+        <!-- Export actions -->
+        <div class="preview-actions">
+          <button id="downloadSlideBtn" class="btn-download">⬇ PNG</button>
+          <button id="downloadZipBtn" class="btn-download btn-download-zip">⬇ All (ZIP)</button>
+          <button id="downloadPdfBtn" class="btn-download btn-download-pdf">⬇ PDF</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<!-- ══ SLIDE EDITOR MODAL ══ -->
+<div id="slideEditorModal" class="editor-modal hidden">
+  <div class="editor-modal-content">
+    <div class="editor-modal-header">
+      <span class="editor-modal-title">Edit Slide</span>
+      <div class="editor-modal-toolbar">
+        <button id="editorUndo" class="editor-tool-btn" title="Undo (Ctrl+Z)">↩</button>
+        <button id="editorRedo" class="editor-tool-btn" title="Redo (Ctrl+Shift+Z)">↪</button>
+        <button id="editorDelete" class="editor-tool-btn danger" title="Delete selected">🗑</button>
+        <div class="editor-toolbar-sep"></div>
+        <button id="editorSave" class="btn-small btn-primary">Save & Close</button>
+        <button id="editorCancel" class="btn-small btn-outline">Cancel</button>
+      </div>
+    </div>
+
+    <div class="editor-modal-body">
+      <!-- Left: Tools -->
+      <div class="editor-tools-panel">
+        <div class="tool-section">
+          <div class="tool-section-title">Text Replace</div>
+          <p class="tool-hint">Cover existing text in the image and type your own</p>
+          <button id="textReplaceBtn" class="tool-item-wide">✏️ Replace Text on Image</button>
+        </div>
+
+        <div class="tool-section">
+          <div class="tool-section-title">Add Elements</div>
+          <div class="tool-grid">
+            <button id="addTextBtn" class="tool-item">T<span>Text</span></button>
+            <button id="addHeadingBtn" class="tool-item"><b>H</b><span>Heading</span></button>
+            <button id="addSubtextBtn" class="tool-item"><small>a</small><span>Subtext</span></button>
+            <button id="addRectBtn" class="tool-item">▬<span>Rect</span></button>
+            <button id="addCircleBtn" class="tool-item">●<span>Circle</span></button>
+            <button id="addTriangleBtn" class="tool-item">▲<span>Triangle</span></button>
+            <button id="addLineBtn" class="tool-item">—<span>Line</span></button>
+            <button id="addStarBtn" class="tool-item">★<span>Star</span></button>
+            <button id="addImageBtn" class="tool-item">🖼<span>Image</span></button>
+          </div>
+          <input type="file" id="editorImageInput" accept="image/*" class="hidden" />
+        </div>
+
+        <div class="tool-section">
+          <div class="tool-section-title">Background</div>
+          <div class="prop-row">
+            <label>Color</label>
+            <input type="color" id="bgColorInput" value="#1a1a2e" />
+            <button id="bgImageBtn" class="btn-small btn-outline">Upload BG</button>
+          </div>
+          <input type="file" id="bgImageInput" accept="image/*" class="hidden" />
+        </div>
+
+        <div class="tool-section">
+          <div class="tool-section-title">Search Elements</div>
+          <div class="element-search-wrap">
+            <input type="text" id="elementSearchInput" placeholder="Search icons..." />
+            <button id="elementSearchBtn" class="btn-small btn-primary">Search</button>
+          </div>
+          <div class="element-chips">
+            <button class="element-chip" data-q="arrow">Arrow</button>
+            <button class="element-chip" data-q="star">Star</button>
+            <button class="element-chip" data-q="heart">Heart</button>
+            <button class="element-chip" data-q="check">Check</button>
+            <button class="element-chip" data-q="fire">Fire</button>
+            <button class="element-chip" data-q="instagram">Social</button>
+            <button class="element-chip" data-q="face">Emoji</button>
+            <button class="element-chip" data-q="sparkle">Sparkle</button>
+            <button class="element-chip" data-q="badge">Badge</button>
+            <button class="element-chip" data-q="ribbon">Ribbon</button>
+          </div>
+          <div id="elementResults" class="element-results"></div>
+        </div>
+
+        <div class="tool-section">
+          <div class="tool-section-title">AI Element</div>
+          <div class="element-search-wrap">
+            <input type="text" id="aiElementInput" placeholder="e.g. golden trophy" />
+            <button id="aiElementBtn" class="btn-small btn-primary">Generate</button>
+          </div>
+          <div id="aiElementLoading" class="hidden" style="text-align:center;padding:0.5rem;">
+            <span class="spinner"></span> Generating...
+          </div>
+        </div>
+
+        <!-- Layers Panel -->
+        <div class="tool-section">
+          <div class="tool-section-title">Layers</div>
+          <div id="layersPanel" class="layers-panel">
+            <div class="layers-empty">No layers yet</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Canvas -->
+      <div class="editor-canvas-area">
+        <canvas id="slideEditorCanvas"></canvas>
+      </div>
+
+      <!-- Right: Properties -->
+      <div class="editor-props-panel" id="editorPropsPanel">
+        <div class="props-empty">Select an element to edit its properties</div>
+        <div id="propsContent" class="props-content hidden">
+          <div class="props-section-title">Position & Size</div>
+          <div class="prop-row">
+            <label>X</label>
+            <input type="number" id="propX" class="prop-input" />
+            <label>Y</label>
+            <input type="number" id="propY" class="prop-input" />
+          </div>
+          <div class="prop-row">
+            <label>W</label>
+            <input type="number" id="propW" class="prop-input" />
+            <label>H</label>
+            <input type="number" id="propH" class="prop-input" />
+          </div>
+          <div class="prop-row">
+            <label>Rotation</label>
+            <input type="range" id="propRotation" min="0" max="360" step="1" value="0" class="prop-range" />
+            <span id="propRotationVal" class="prop-val">0°</span>
+          </div>
+          <div class="prop-row">
+            <label>Opacity</label>
+            <input type="range" id="propOpacity" min="0" max="1" step="0.05" value="1" class="prop-range" />
+            <span id="propOpacityVal" class="prop-val">100%</span>
+          </div>
+
+          <div id="propTextSection">
+            <div class="props-section-title">Text</div>
+            <div class="prop-row" id="propTextRow">
+              <textarea id="propText" class="prop-textarea" rows="2" placeholder="Enter text..."></textarea>
+            </div>
+            <div class="prop-row">
+              <label>Font</label>
+              <select id="propFontFamily" class="prop-select">
+                <option value="Inter">Inter</option>
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Impact">Impact</option>
+                <option value="Comic Sans MS">Comic Sans</option>
+                <option value="Trebuchet MS">Trebuchet</option>
+              </select>
+            </div>
+            <div class="prop-row">
+              <label>Size</label>
+              <input type="number" id="propFontSize" min="8" max="200" class="prop-input" />
+              <label>Weight</label>
+              <select id="propFontWeight" class="prop-select-sm">
+                <option value="400">Normal</option>
+                <option value="600">Semi</option>
+                <option value="700">Bold</option>
+                <option value="800">Extra</option>
+              </select>
+            </div>
+            <div class="prop-row">
+              <label>Align</label>
+              <div class="prop-btn-group">
+                <button class="prop-align-btn" data-align="left" title="Left">≡</button>
+                <button class="prop-align-btn active" data-align="center" title="Center">≡</button>
+                <button class="prop-align-btn" data-align="right" title="Right">≡</button>
+              </div>
+            </div>
+            <div class="prop-row">
+              <label>Color</label>
+              <input type="color" id="propTextColor" value="#ffffff" />
+              <label>BG</label>
+              <input type="color" id="propTextBg" value="#000000" />
+              <button id="propTextBgToggle" class="btn-small btn-outline prop-toggle-btn">Off</button>
+            </div>
+          </div>
+
+          <div id="propShapeSection">
+            <div class="props-section-title">Shape</div>
+            <div class="prop-row">
+              <label>Fill</label>
+              <input type="color" id="propShapeFill" value="#7c3aed" />
+              <label>Stroke</label>
+              <input type="color" id="propShapeStroke" value="#ffffff" />
+            </div>
+            <div class="prop-row">
+              <label>Stroke W</label>
+              <input type="number" id="propStrokeWidth" min="0" max="20" class="prop-input" value="0" />
+              <label>Radius</label>
+              <input type="number" id="propBorderRadius" min="0" max="100" class="prop-input" value="0" />
+            </div>
+          </div>
+
+          <div id="propImageSection">
+            <div class="props-section-title">Image</div>
+            <div class="prop-row">
+              <label>Radius</label>
+              <input type="number" id="propImageRadius" min="0" max="200" class="prop-input" value="0" />
+            </div>
+          </div>
+
+          <div class="props-section-title" style="margin-top:0.8rem">Actions</div>
+          <div class="prop-row">
+            <button id="propDuplicate" class="btn-small btn-outline" style="flex:1">Duplicate</button>
+            <button id="propLayerUp" class="btn-small btn-outline" title="Move up">↑</button>
+            <button id="propLayerDown" class="btn-small btn-outline" title="Move down">↓</button>
+            <button id="propLayerDelete" class="btn-small btn-danger" title="Delete">🗑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="{{ url_for('static', filename='js/canvas-editor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+{% endblock %}
