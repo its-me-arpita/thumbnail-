@@ -12,15 +12,32 @@
 <div class="page-hero">
   <div class="page-hero-left">
     <h1 class="page-hero-title">Thumbnail Templates</h1>
-    <p class="page-hero-sub">Start from a template or create from scratch — edit like Canva</p>
+    <p class="page-hero-sub">12 professional templates — click any to open in editor</p>
+  </div>
+  <div class="page-hero-chips">
+    <div class="stat-chip"><span>🎨</span> 12 Themes</div>
+    <div class="stat-chip"><span>✏️</span> Fully Editable</div>
+    <div class="stat-chip"><span>⚡</span> 1280×720</div>
   </div>
 </div>
 
+<!-- Filter Tabs -->
+<div class="tpl-filter-row">
+  <button class="tpl-filter active" data-filter="all">All</button>
+  <button class="tpl-filter" data-filter="youtube">YouTube</button>
+  <button class="tpl-filter" data-filter="business">Business</button>
+  <button class="tpl-filter" data-filter="lifestyle">Lifestyle</button>
+  <button class="tpl-filter" data-filter="tech">Tech</button>
+  <button class="tpl-filter" data-filter="gaming">Gaming</button>
+</div>
+
 <div class="templates-grid">
-  <!-- Blank -->
-  <a href="/editor" class="template-card blank-card">
+
+  <!-- 0. Blank Canvas -->
+  <a href="/editor" class="template-card blank-card" data-cat="all">
     <div class="template-thumb blank-thumb">
       <span class="blank-plus">+</span>
+      <span class="blank-label">Create Blank</span>
     </div>
     <div class="template-info">
       <div class="template-name">Blank Canvas</div>
@@ -28,82 +45,270 @@
     </div>
   </a>
 
-  <!-- YouTube -->
-  <a href="/editor?tpl=youtube" class="template-card">
-    <div class="template-thumb" style="background: linear-gradient(135deg, #1a0533, #0f0f23);">
-      <div class="tpl-preview-youtube">
-        <div class="tpl-bar" style="background:#7c3aed; position:absolute; bottom:0; left:0; right:0; height:30%;opacity:0.85;"></div>
-        <span class="tpl-title" style="top:25%;left:8%;">YOUR TITLE</span>
-        <span class="tpl-sub" style="color:#a78bfa;top:48%;left:8%;font-size:0.5rem;">Subtitle text</span>
-        <span class="tpl-badge" style="background:#ef4444;bottom:12%;left:8%;">WATCH NOW</span>
+  <!-- 1. YouTube Bold Fire -->
+  <a href="/editor?tpl=yt-fire" class="template-card" data-cat="youtube">
+    <div class="template-thumb">
+      <div class="tpl-yt-fire">
+        <div class="tpl-glow-bg" style="background:radial-gradient(ellipse at 30% 50%, #ff4500 0%, #1a0000 70%);"></div>
+        <div class="tpl-img-right" style="background:linear-gradient(135deg,#ff6b35,#f7931e);clip-path:polygon(20% 0%,100% 0%,100% 100%,0% 100%);opacity:0.35;"></div>
+        <div class="tpl-stripe" style="background:#ff4500;height:4px;width:40%;bottom:22%;left:6%;border-radius:2px;"></div>
+        <span class="tpl-eyebrow" style="color:#ff6b35;left:6%;top:18%;">MUST WATCH</span>
+        <span class="tpl-headline" style="left:6%;top:28%;font-size:1.05rem;line-height:1.1;max-width:55%;">10 SECRETS<br>Nobody Tells You</span>
+        <span class="tpl-sub-text" style="left:6%;bottom:18%;color:#ffb347;">Watch till the end →</span>
+        <div class="tpl-badge-pill" style="background:#ff4500;right:6%;top:12%;">🔥 VIRAL</div>
       </div>
     </div>
     <div class="template-info">
-      <div class="template-name">YouTube Bold</div>
-      <div class="template-desc">Eye-catching YouTube thumbnail</div>
+      <div class="template-name">YouTube Fire</div>
+      <div class="template-meta"><span class="tpl-cat-badge yt">YouTube</span></div>
     </div>
   </a>
 
-  <!-- Gaming -->
-  <a href="/editor?tpl=gaming" class="template-card">
-    <div class="template-thumb" style="background: #1a0a2e;">
-      <div class="tpl-preview-gaming">
-        <div style="border:2px solid #f59e0b;border-radius:8px;position:absolute;inset:6%;"></div>
-        <span class="tpl-title" style="color:#f59e0b;top:20%;left:12%;">EPIC GAMING</span>
-        <span class="tpl-title" style="top:42%;left:12%;font-size:0.65rem;">MOMENTS</span>
+  <!-- 2. Tech Neon Dark -->
+  <a href="/editor?tpl=tech-neon" class="template-card" data-cat="tech">
+    <div class="template-thumb">
+      <div class="tpl-tech-neon" style="background:#050d1a;">
+        <div class="tpl-grid-lines"></div>
+        <div class="tpl-neon-circle" style="width:55%;aspect-ratio:1;border:1.5px solid rgba(0,255,200,0.25);border-radius:50%;position:absolute;right:-10%;top:-20%;"></div>
+        <div class="tpl-neon-circle" style="width:30%;aspect-ratio:1;border:1.5px solid rgba(0,200,255,0.2);border-radius:50%;position:absolute;right:10%;top:20%;"></div>
+        <span class="tpl-eyebrow" style="color:#00ffc8;left:6%;top:15%;letter-spacing:3px;font-size:0.38rem;">TUTORIAL 2025</span>
+        <div style="position:absolute;left:6%;top:24%;width:3px;height:28%;background:linear-gradient(to bottom,#00ffc8,#0080ff);border-radius:2px;"></div>
+        <span class="tpl-headline" style="left:13%;top:24%;font-size:0.85rem;line-height:1.15;color:#e0f7ff;max-width:58%;">Build an AI<br>App in 30 Min</span>
+        <span class="tpl-sub-text" style="left:13%;top:62%;color:#4dd9ff;font-size:0.42rem;">Full source code included</span>
+        <div class="tpl-badge-pill" style="background:linear-gradient(90deg,#0080ff,#00ffc8);left:6%;bottom:12%;">⚡ TECH</div>
       </div>
     </div>
     <div class="template-info">
-      <div class="template-name">Gaming</div>
-      <div class="template-desc">Bold gaming content style</div>
+      <div class="template-name">Tech Neon Dark</div>
+      <div class="template-meta"><span class="tpl-cat-badge tech">Tech</span></div>
     </div>
   </a>
 
-  <!-- Tutorial -->
-  <a href="/editor?tpl=tutorial" class="template-card">
-    <div class="template-thumb" style="background: #f8fafc;">
-      <div class="tpl-preview-tutorial">
-        <div style="background:#7c3aed;position:absolute;left:0;top:0;bottom:0;width:40%;"></div>
-        <span class="tpl-title" style="color:#fff;top:30%;left:5%;font-size:0.55rem;">HOW TO</span>
-        <span class="tpl-title" style="color:#1e293b;top:30%;left:45%;font-size:0.55rem;">TUTORIAL</span>
-      </div>
+  <!-- 3. Business Corporate -->
+  <a href="/editor?tpl=business" class="template-card" data-cat="business">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(120deg,#0f172a 0%,#1e3a5f 100%);"></div>
+      <div style="position:absolute;right:0;top:0;bottom:0;width:38%;background:linear-gradient(160deg,#2563eb,#1e40af);clip-path:polygon(15% 0%,100% 0%,100% 100%,0% 100%);"></div>
+      <div style="position:absolute;left:6%;top:50%;transform:translateY(-50%);width:3px;height:40%;background:#2563eb;border-radius:2px;"></div>
+      <span class="tpl-eyebrow" style="color:#60a5fa;left:12%;top:22%;letter-spacing:2px;font-size:0.36rem;">BUSINESS STRATEGY</span>
+      <span class="tpl-headline" style="left:12%;top:30%;font-size:0.78rem;line-height:1.2;max-width:50%;color:#f0f9ff;">Scale Your<br>Business<br>10× Faster</span>
+      <span class="tpl-sub-text" style="left:12%;bottom:22%;color:#93c5fd;font-size:0.4rem;">Proven frameworks inside</span>
+      <div class="tpl-badge-pill" style="background:#2563eb;right:6%;bottom:14%;">💼 GROWTH</div>
     </div>
     <div class="template-info">
-      <div class="template-name">Tutorial</div>
-      <div class="template-desc">Clean tutorial/how-to layout</div>
+      <div class="template-name">Corporate Blue</div>
+      <div class="template-meta"><span class="tpl-cat-badge biz">Business</span></div>
     </div>
   </a>
 
-  <!-- Podcast -->
-  <a href="/editor?tpl=podcast" class="template-card">
-    <div class="template-thumb" style="background: #18181b;">
-      <div class="tpl-preview-podcast">
-        <div style="background:#27272a;border-radius:50%;width:35%;aspect-ratio:1;position:absolute;left:8%;top:20%;display:grid;place-items:center;font-size:1.2rem;">🎙</div>
-        <span class="tpl-title" style="top:28%;left:50%;font-size:0.55rem;">THE PODCAST</span>
-        <span class="tpl-sub" style="top:48%;left:50%;color:#a1a1aa;">Episode Title</span>
-        <span class="tpl-badge" style="background:#ef4444;top:62%;left:50%;">NEW EPISODE</span>
-      </div>
+  <!-- 4. Fitness Energy -->
+  <a href="/editor?tpl=fitness" class="template-card" data-cat="lifestyle">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f0f0f 0%,#1a0a00 60%,#2d1200 100%);"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(251,146,60,0.3) 0%,transparent 65%);"></div>
+      <div style="position:absolute;left:0;top:0;bottom:0;right:40%;background:linear-gradient(180deg,rgba(251,146,60,0.08),transparent);border-right:1px solid rgba(251,146,60,0.2);"></div>
+      <span class="tpl-eyebrow" style="color:#fb923c;left:6%;top:15%;letter-spacing:3px;">WORKOUT</span>
+      <span class="tpl-headline" style="left:6%;top:26%;font-size:0.9rem;line-height:1.1;color:#fff;max-width:52%;">30-Day<br>Body<br>Transformation</span>
+      <div style="position:absolute;left:6%;top:64%;background:#fb923c;height:2px;width:30%;border-radius:2px;"></div>
+      <span class="tpl-sub-text" style="left:6%;bottom:16%;color:#fed7aa;">No gym needed · Beginner friendly</span>
+      <div class="tpl-badge-pill" style="background:#ea580c;right:6%;top:12%;">💪 FITNESS</div>
     </div>
     <div class="template-info">
-      <div class="template-name">Podcast</div>
-      <div class="template-desc">Podcast episode thumbnail</div>
+      <div class="template-name">Fitness Energy</div>
+      <div class="template-meta"><span class="tpl-cat-badge life">Lifestyle</span></div>
     </div>
   </a>
 
-  <!-- Minimal -->
-  <a href="/editor?tpl=minimal" class="template-card">
-    <div class="template-thumb" style="background: #fafaf9;">
-      <div class="tpl-preview-minimal">
-        <span class="tpl-title" style="color:#1c1917;top:28%;left:10%;font-size:0.7rem;">Clean &amp;</span>
-        <span class="tpl-title" style="color:#1c1917;top:45%;left:10%;font-size:0.7rem;">Simple</span>
-        <div style="background:#7c3aed;height:3px;width:25%;position:absolute;top:65%;left:10%;border-radius:2px;"></div>
-        <span class="tpl-sub" style="color:#78716c;top:72%;left:10%;">A minimalist approach</span>
+  <!-- 5. Food & Recipe -->
+  <a href="/editor?tpl=food" class="template-card" data-cat="lifestyle">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(160deg,#fef3c7 0%,#fde68a 40%,#f59e0b 100%);"></div>
+      <div style="position:absolute;right:0;top:0;bottom:0;width:42%;background:linear-gradient(135deg,#d97706,#92400e);clip-path:polygon(18% 0%,100% 0%,100% 100%,0% 100%);opacity:0.85;"></div>
+      <div style="position:absolute;left:5%;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border-radius:10px;padding:4% 5%;width:50%;">
+        <div style="font-size:0.6rem;font-weight:900;color:#92400e;letter-spacing:1px;margin-bottom:2px;">RECIPE</div>
+        <div style="font-size:0.7rem;font-weight:800;color:#1c1917;line-height:1.2;">Creamy Pasta<br>in 15 Mins</div>
+        <div style="margin-top:3px;font-size:0.37rem;color:#78716c;">⏱ 15 min · 🍽 2 servings · ⭐ Easy</div>
       </div>
+      <div class="tpl-badge-pill" style="background:#92400e;color:#fef3c7;right:6%;bottom:12%;">🍝 FOOD</div>
     </div>
     <div class="template-info">
-      <div class="template-name">Minimal</div>
-      <div class="template-desc">Clean minimalist design</div>
+      <div class="template-name">Food & Recipe</div>
+      <div class="template-meta"><span class="tpl-cat-badge life">Lifestyle</span></div>
     </div>
   </a>
+
+  <!-- 6. Travel Wanderlust -->
+  <a href="/editor?tpl=travel" class="template-card" data-cat="lifestyle">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0ea5e9 0%,#0369a1 40%,#065f46 100%);"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.7) 100%);"></div>
+      <!-- Stylized mountain silhouette -->
+      <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:55%;" viewBox="0 0 400 200" preserveAspectRatio="none">
+        <polygon points="0,200 80,60 160,130 240,40 320,100 400,50 400,200" fill="rgba(5,46,22,0.9)"/>
+        <polygon points="0,200 60,100 130,150 220,80 300,130 400,90 400,200" fill="rgba(3,30,15,0.95)"/>
+      </svg>
+      <span class="tpl-eyebrow" style="color:#7dd3fc;left:6%;top:12%;letter-spacing:3px;">TRAVEL GUIDE</span>
+      <span class="tpl-headline" style="left:6%;top:22%;font-size:0.85rem;line-height:1.15;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.5);max-width:65%;">Top 10 Hidden<br>Gems in Europe</span>
+      <span class="tpl-sub-text" style="left:6%;bottom:22%;color:#bae6fd;text-shadow:0 1px 4px rgba(0,0,0,0.6);">✈ Must-visit spots for 2025</span>
+      <div class="tpl-badge-pill" style="background:#0369a1;right:6%;bottom:18%;">🌍 TRAVEL</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Travel Wanderlust</div>
+      <div class="template-meta"><span class="tpl-cat-badge life">Lifestyle</span></div>
+    </div>
+  </a>
+
+  <!-- 7. Finance & Money -->
+  <a href="/editor?tpl=finance" class="template-card" data-cat="business">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:#0d1117;"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(34,197,94,0.2),transparent 60%);"></div>
+      <!-- Chart lines -->
+      <svg style="position:absolute;right:4%;bottom:20%;width:36%;height:45%;opacity:0.6;" viewBox="0 0 120 80">
+        <polyline points="5,70 25,55 45,60 65,35 85,40 105,15" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="5,70 25,55 45,60 65,35 85,40 105,15" fill="none" stroke="rgba(34,197,94,0.15)" stroke-width="12"/>
+        <circle cx="105" cy="15" r="4" fill="#22c55e"/>
+      </svg>
+      <div style="position:absolute;left:6%;top:18%;width:2px;height:35%;background:linear-gradient(to bottom,#22c55e,transparent);border-radius:2px;"></div>
+      <span class="tpl-eyebrow" style="color:#4ade80;left:12%;top:18%;letter-spacing:2px;">INVESTING</span>
+      <span class="tpl-headline" style="left:12%;top:28%;font-size:0.8rem;line-height:1.15;color:#f0fdf4;max-width:52%;">How I Made<br>$10K Passive<br>Income</span>
+      <span class="tpl-sub-text" style="left:12%;bottom:20%;color:#86efac;">Step-by-step breakdown →</span>
+      <div class="tpl-badge-pill" style="background:#15803d;right:6%;top:14%;">💰 FINANCE</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Finance & Money</div>
+      <div class="template-meta"><span class="tpl-cat-badge biz">Business</span></div>
+    </div>
+  </a>
+
+  <!-- 8. Gaming Neon -->
+  <a href="/editor?tpl=gaming" class="template-card" data-cat="gaming">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a001a,#1a0035,#00001a);"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(168,85,247,0.35),transparent 65%);"></div>
+      <!-- Hexagon decorations -->
+      <svg style="position:absolute;right:-2%;top:5%;width:45%;height:90%;opacity:0.15;" viewBox="0 0 200 200">
+        <polygon points="100,10 180,55 180,145 100,190 20,145 20,55" fill="none" stroke="#a855f7" stroke-width="1.5"/>
+        <polygon points="100,35 160,68 160,133 100,166 40,133 40,68" fill="none" stroke="#7c3aed" stroke-width="1"/>
+      </svg>
+      <div style="position:absolute;left:5%;top:10%;right:0;height:2px;background:linear-gradient(to right,#a855f7,transparent);"></div>
+      <div style="position:absolute;left:5%;bottom:10%;right:0;height:2px;background:linear-gradient(to right,#a855f7,transparent);"></div>
+      <span class="tpl-eyebrow" style="color:#c084fc;left:6%;top:18%;letter-spacing:3px;font-size:0.36rem;">GAMEPLAY</span>
+      <span class="tpl-headline" style="left:6%;top:28%;font-size:0.9rem;line-height:1.1;color:#fff;text-shadow:0 0 20px rgba(168,85,247,0.8);max-width:55%;">EPIC WIN<br>Impossible<br>Boss Fight</span>
+      <div class="tpl-badge-pill" style="background:linear-gradient(90deg,#7c3aed,#a855f7);left:6%;bottom:14%;">🎮 GAMING</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Gaming Neon</div>
+      <div class="template-meta"><span class="tpl-cat-badge game">Gaming</span></div>
+    </div>
+  </a>
+
+  <!-- 9. Podcast Interview -->
+  <a href="/editor?tpl=podcast" class="template-card" data-cat="business">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#18181b,#27272a);"></div>
+      <div style="position:absolute;left:0;top:0;bottom:0;width:42%;background:linear-gradient(160deg,#7c3aed,#4c1d95);"></div>
+      <div style="position:absolute;left:42%;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#7c3aed,transparent);"></div>
+      <!-- Mic icon area -->
+      <div style="position:absolute;left:11%;top:50%;transform:translate(-50%,-50%);width:14%;aspect-ratio:1;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;border:1px solid rgba(255,255,255,0.2);">🎙</div>
+      <!-- Sound waves -->
+      <div style="position:absolute;left:20%;top:50%;transform:translateY(-50%);display:flex;gap:1px;align-items:center;height:20%;">
+        <div style="width:2px;height:30%;background:rgba(255,255,255,0.3);border-radius:1px;"></div>
+        <div style="width:2px;height:70%;background:rgba(255,255,255,0.5);border-radius:1px;"></div>
+        <div style="width:2px;height:100%;background:rgba(255,255,255,0.7);border-radius:1px;"></div>
+        <div style="width:2px;height:55%;background:rgba(255,255,255,0.5);border-radius:1px;"></div>
+        <div style="width:2px;height:35%;background:rgba(255,255,255,0.3);border-radius:1px;"></div>
+      </div>
+      <span class="tpl-eyebrow" style="color:#a78bfa;left:48%;top:20%;letter-spacing:2px;font-size:0.36rem;">EP. 42</span>
+      <span class="tpl-headline" style="left:48%;top:30%;font-size:0.65rem;line-height:1.2;color:#fff;max-width:46%;">The Future of<br>AI & Creativity</span>
+      <span class="tpl-sub-text" style="left:48%;top:60%;color:#a1a1aa;">with Guest Name</span>
+      <div class="tpl-badge-pill" style="background:#7c3aed;left:48%;bottom:14%;">🎧 PODCAST</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Podcast Interview</div>
+      <div class="template-meta"><span class="tpl-cat-badge biz">Business</span></div>
+    </div>
+  </a>
+
+  <!-- 10. Education Bright -->
+  <a href="/editor?tpl=edu" class="template-card" data-cat="tech">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#eff6ff,#dbeafe);"></div>
+      <div style="position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(135deg,#2563eb,#1d4ed8);clip-path:polygon(20% 0%,100% 0%,100% 100%,0% 100%);"></div>
+      <!-- Checklist in white card -->
+      <div style="position:absolute;left:5%;top:50%;transform:translateY(-50%);background:#fff;border-radius:8px;padding:4% 5%;width:42%;box-shadow:0 4px 12px rgba(37,99,235,0.15);">
+        <div style="font-size:0.5rem;font-weight:900;color:#1d4ed8;margin-bottom:3px;">LEARN TODAY</div>
+        <div style="font-size:0.37rem;color:#374151;line-height:1.6;">✅ Lesson 1 - Basics<br>✅ Lesson 2 - Advanced<br>⬜ Lesson 3 - Mastery</div>
+      </div>
+      <span class="tpl-eyebrow" style="color:#bfdbfe;right:6%;top:18%;text-align:right;">COURSE</span>
+      <span class="tpl-headline" style="right:6%;top:28%;font-size:0.72rem;line-height:1.2;color:#fff;text-align:right;max-width:42%;">Complete<br>Python<br>Bootcamp</span>
+      <span class="tpl-sub-text" style="right:6%;bottom:20%;color:#bfdbfe;text-align:right;">Beginner → Expert</span>
+      <div class="tpl-badge-pill" style="background:#1d4ed8;right:6%;bottom:10%;">📚 COURSE</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Education Bright</div>
+      <div class="template-meta"><span class="tpl-cat-badge tech">Tech</span></div>
+    </div>
+  </a>
+
+  <!-- 11. Beauty & Lifestyle -->
+  <a href="/editor?tpl=beauty" class="template-card" data-cat="lifestyle">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#fdf2f8,#fce7f3,#fbcfe8);"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(236,72,153,0.2),transparent 55%);"></div>
+      <!-- Decorative circles -->
+      <div style="position:absolute;right:-5%;top:-10%;width:50%;aspect-ratio:1;border:1.5px solid rgba(236,72,153,0.2);border-radius:50%;"></div>
+      <div style="position:absolute;right:5%;top:10%;width:30%;aspect-ratio:1;border:1.5px solid rgba(236,72,153,0.15);border-radius:50%;"></div>
+      <div style="position:absolute;left:5%;top:0;width:3px;height:100%;background:linear-gradient(to bottom,#ec4899,transparent);border-radius:2px;opacity:0.5;"></div>
+      <span class="tpl-eyebrow" style="color:#ec4899;left:10%;top:18%;letter-spacing:3px;">BEAUTY</span>
+      <span class="tpl-headline" style="left:10%;top:28%;font-size:0.8rem;line-height:1.2;color:#831843;max-width:55%;">5 Skincare<br>Secrets for<br>Glowing Skin</span>
+      <div style="position:absolute;left:10%;top:65%;background:#ec4899;height:2px;width:28%;border-radius:2px;"></div>
+      <span class="tpl-sub-text" style="left:10%;bottom:16%;color:#be185d;font-size:0.4rem;">Dermatologist approved tips</span>
+      <div class="tpl-badge-pill" style="background:#ec4899;right:6%;top:14%;">✨ BEAUTY</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Beauty & Lifestyle</div>
+      <div class="template-meta"><span class="tpl-cat-badge life">Lifestyle</span></div>
+    </div>
+  </a>
+
+  <!-- 12. Motivational Quote -->
+  <a href="/editor?tpl=motivation" class="template-card" data-cat="youtube">
+    <div class="template-thumb">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1e1b4b,#312e81,#1e1b4b);"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(129,140,248,0.25),transparent 70%);"></div>
+      <!-- Big quotation mark -->
+      <div style="position:absolute;left:4%;top:5%;font-size:3.5rem;color:rgba(129,140,248,0.12);font-family:Georgia,serif;line-height:1;font-weight:900;">"</div>
+      <div style="position:absolute;right:4%;bottom:5%;font-size:3.5rem;color:rgba(129,140,248,0.12);font-family:Georgia,serif;line-height:1;font-weight:900;transform:rotate(180deg);">"</div>
+      <!-- Divider lines -->
+      <div style="position:absolute;left:10%;top:50%;transform:translateY(-50%);width:80%;text-align:center;">
+        <div style="height:1px;background:linear-gradient(to right,transparent,rgba(165,180,252,0.4),transparent);margin-bottom:8px;"></div>
+        <div style="font-size:0.7rem;font-weight:900;color:#e0e7ff;line-height:1.3;letter-spacing:-0.2px;text-shadow:0 0 30px rgba(129,140,248,0.5);">Your only limit<br>is your mind.</div>
+        <div style="height:1px;background:linear-gradient(to right,transparent,rgba(165,180,252,0.4),transparent);margin-top:8px;"></div>
+      </div>
+      <span class="tpl-sub-text" style="left:50%;bottom:18%;transform:translateX(-50%);white-space:nowrap;color:#a5b4fc;">— Daily Motivation</span>
+      <div class="tpl-badge-pill" style="background:rgba(99,102,241,0.7);left:50%;top:12%;transform:translateX(-50%);white-space:nowrap;backdrop-filter:blur(4px);">💡 MOTIVATION</div>
+    </div>
+    <div class="template-info">
+      <div class="template-name">Motivational Quote</div>
+      <div class="template-meta"><span class="tpl-cat-badge yt">YouTube</span></div>
+    </div>
+  </a>
+
 </div>
+
+<script>
+  // Filter tabs
+  document.querySelectorAll('.tpl-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tpl-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.template-card').forEach(card => {
+        const cat = card.dataset.cat || 'all';
+        card.style.display = (f === 'all' || cat === f || cat === 'all') ? '' : 'none';
+      });
+    });
+  });
+</script>
 {% endblock %}
