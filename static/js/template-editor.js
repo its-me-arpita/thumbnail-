@@ -193,6 +193,109 @@ document.getElementById('exportBtn').addEventListener('click', () => {
   document.body.removeChild(a);
 });
 
+// ── Detect & Edit Text ───────────────────────────────────────────────────────
+const _fontSizeMap = { small: 0.03, medium: 0.055, large: 0.08, xlarge: 0.12 };
+
+document.getElementById('detectTextEditorBtn').addEventListener('click', async () => {
+  const btnText = document.getElementById('detectTextEditorBtnText');
+  const btnLoader = document.getElementById('detectTextEditorLoader');
+  const statusEl = document.getElementById('detectTextEditorStatus');
+
+  // Export the current canvas (background only — render without layers temporarily)
+  // We use exportPNG which includes bgImage + layers, but we need just the bg image.
+  // If no bgImage, nothing to detect.
+  if (!editor.bgImage) {
+    statusEl.textContent = 'Load a generated image as background first.';
+    statusEl.classList.remove('hidden');
+    return;
+  }
+
+  btnText.classList.add('hidden');
+  btnLoader.classList.remove('hidden');
+  document.getElementById('detectTextEditorBtn').disabled = true;
+  statusEl.classList.add('hidden');
+
+  try {
+    // Export just the background image as base64 by drawing it onto a temp canvas
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = editor.canvasW;
+    tmpCanvas.height = editor.canvasH;
+    const tmpCtx = tmpCanvas.getContext('2d');
+    tmpCtx.drawImage(editor.bgImage, 0, 0, editor.canvasW, editor.canvasH);
+    const dataUrl = tmpCanvas.toDataURL('image/png');
+    const b64 = dataUrl.split(',')[1];
+
+    const res = await fetch('/detect-text', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: b64, mime_type: 'image/png' }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      statusEl.textContent = '⚠ ' + (data.error || 'Detection failed');
+      statusEl.classList.remove('hidden');
+      return;
+    }
+
+    const regions = data.regions || [];
+    if (regions.length === 0) {
+      statusEl.textContent = 'No text found in the image.';
+      statusEl.classList.remove('hidden');
+      return;
+    }
+
+    const cw = editor.canvasW;
+    const ch = editor.canvasH;
+
+    regions.forEach(region => {
+      const pad = 6;
+      const x = Math.max(0, Math.round((region.x / 100) * cw) - pad);
+      const y = Math.max(0, Math.round((region.y / 100) * ch) - pad);
+      const w = Math.min(cw - x, Math.round((region.w / 100) * cw) + pad * 2);
+      const h = Math.min(ch - y, Math.round((region.h / 100) * ch) + pad * 2);
+
+      // Sample edge pixels (not center) to get background color without text interference
+      const samplePoints = [
+        [x + 2, y + 2], [x + w - 2, y + 2],
+        [x + 2, y + h - 2], [x + w - 2, y + h - 2],
+        [x + Math.floor(w / 2), y + 2], [x + Math.floor(w / 2), y + h - 2],
+      ];
+      let rSum = 0, gSum = 0, bSum = 0;
+      samplePoints.forEach(([sx, sy]) => {
+        const px = tmpCtx.getImageData(Math.max(0, Math.min(cw - 1, sx)), Math.max(0, Math.min(ch - 1, sy)), 1, 1).data;
+        rSum += px[0]; gSum += px[1]; bSum += px[2];
+      });
+      const n = samplePoints.length;
+      const bgHex = `#${((1 << 24) + (Math.round(rSum/n) << 16) + (Math.round(gSum/n) << 8) + Math.round(bSum/n)).toString(16).slice(1)}`;
+
+      editor.addShape('rect', { x, y, w, h, fill: bgHex, borderRadius: 0, opacity: 1 });
+
+      const fsRatio = _fontSizeMap[region.fontSize] || 0.055;
+      const fontSize = Math.max(12, Math.round(ch * fsRatio));
+      editor.addText(region.text, {
+        x, y, w, h,
+        fontSize,
+        fontWeight: region.fontWeight === 'bold' ? '800' : '500',
+        color: region.color || '#ffffff',
+        align: 'center',
+      });
+    });
+
+    statusEl.textContent = `✓ ${regions.length} text element${regions.length > 1 ? 's' : ''} detected — double-click any to edit`;
+    statusEl.classList.remove('hidden');
+    refreshLayers();
+
+  } catch (err) {
+    statusEl.textContent = '⚠ Error: ' + err.message;
+    statusEl.classList.remove('hidden');
+  } finally {
+    btnText.classList.remove('hidden');
+    btnLoader.classList.add('hidden');
+    document.getElementById('detectTextEditorBtn').disabled = false;
+  }
+});
+
 // Clear
 document.getElementById('clearBtn').addEventListener('click', () => {
   if (confirm('Clear all layers?')) {

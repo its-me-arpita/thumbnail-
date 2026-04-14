@@ -86,6 +86,66 @@ def generate():
     return _run_image_generation(content_parts, aspect_ratio=aspect_ratio)
 
 
+@generate_bp.route("/detect-text", methods=["POST"])
+def detect_text():
+    """Use Gemini vision to detect text regions in an AI-generated image.
+    Returns a list of text elements with position (as % of image), content, color, fontSize."""
+    import json, re as _re
+
+    data = request.get_json()
+    image_b64 = data.get("image", "").strip()
+    mime_type = data.get("mime_type", "image/png").strip()
+
+    if not image_b64:
+        return jsonify({"error": "Image is required"}), 400
+
+    prompt = (
+        "Analyze this image and find ALL visible text elements (headings, subheadings, body text, labels, badges, numbers).\n"
+        "For EACH text element return a JSON object with these keys:\n"
+        "  text       — the exact text string as it appears\n"
+        "  x          — left position as percentage of image width (0-100)\n"
+        "  y          — top position as percentage of image height (0-100)\n"
+        "  w          — width as percentage of image width (0-100)\n"
+        "  h          — height as percentage of image height (0-100)\n"
+        "  color      — approximate text color as hex (e.g. #ffffff)\n"
+        "  fontSize   — relative font size: 'small', 'medium', 'large', 'xlarge'\n"
+        "  fontWeight — 'normal' or 'bold'\n"
+        "Return ONLY a valid JSON array, no explanation, no markdown fences.\n"
+        "Example: [{\"text\":\"Hello World\",\"x\":10,\"y\":20,\"w\":40,\"h\":10,\"color\":\"#ffffff\",\"fontSize\":\"large\",\"fontWeight\":\"bold\"}]"
+    )
+
+    try:
+        image_bytes = base64.b64decode(image_b64)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[
+                types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
+                prompt,
+            ],
+        )
+
+        # Extract text from response (handle both direct .text and candidates path)
+        raw = None
+        if hasattr(response, 'text') and response.text:
+            raw = response.text.strip()
+        elif hasattr(response, 'candidates') and response.candidates:
+            for part in (response.candidates[0].content.parts or []):
+                if hasattr(part, 'text') and part.text:
+                    raw = part.text.strip()
+                    break
+
+        if not raw:
+            return jsonify({"error": "No response from AI"}), 500
+
+        # Strip markdown fences if present
+        raw = _re.sub(r'^```(?:json)?\s*', '', raw)
+        raw = _re.sub(r'\s*```$', '', raw.strip())
+        text_regions = json.loads(raw)
+        return jsonify({"regions": text_regions})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @generate_bp.route("/generate-element", methods=["POST"])
 def generate_element():
     data = request.get_json()
@@ -107,6 +167,30 @@ def generate_element():
     return _run_image_generation([prompt], aspect_ratio="1:1")
 
 
+def _parse_prompt_meta(prompt):
+    """Extract slide_count and aspect_ratio from the user's prompt text."""
+    import re
+    text = prompt.lower()
+
+    # Slide count: "5 slides", "5-slide", "5 slide", "generate 5", "create 5"
+    count_match = re.search(r'\b(\d+)[- ]?slide', text) or re.search(r'\b(create|generate|make)\s+(?:a\s+)?(\d+)', text)
+    if count_match:
+        n = int(count_match.group(2) if count_match.lastindex == 2 else count_match.group(1))
+        slide_count = max(2, min(n, 10))
+    else:
+        slide_count = 5  # default
+
+    # Platform / aspect ratio
+    if 'linkedin' in text:
+        aspect_ratio = '4:5'
+    elif 'twitter' in text or 'x carousel' in text or '16:9' in text:
+        aspect_ratio = '16:9'
+    else:
+        aspect_ratio = '1:1'  # instagram default
+
+    return slide_count, aspect_ratio
+
+
 @generate_bp.route("/generate-carousel-prompt", methods=["POST"])
 def generate_carousel_prompt():
     data = request.get_json()
@@ -114,9 +198,7 @@ def generate_carousel_prompt():
     if not user_prompt:
         return jsonify({"error": "Prompt is required"}), 400
 
-    slide_count = int(data.get("slide_count", 5))
-    slide_count = max(2, min(slide_count, 10))
-    aspect_ratio = data.get("aspect_ratio", "1:1").strip()
+    slide_count, aspect_ratio = _parse_prompt_meta(user_prompt)
 
     slides = []
     errors = []

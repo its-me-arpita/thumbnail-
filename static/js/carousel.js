@@ -181,17 +181,8 @@ form.addEventListener('submit', async (e) => {
   // Build payload based on mode
   let endpoint, body;
   if (isPromptMode) {
-    const platformEl = document.getElementById('platform');
-    const platform = platformEl ? platformEl.value : 'instagram';
-    const platformRatios = { instagram: '1:1', linkedin: '4:5', twitter: '16:9' };
-    const slideCountEl = document.getElementById('slide_count');
-    const slideCount = slideCountEl ? parseInt(slideCountEl.value) : 5;
     endpoint = '/generate-carousel-prompt';
-    body = {
-      prompt: promptText,
-      slide_count: slideCount,
-      aspect_ratio: platformRatios[platform] || '1:1',
-    };
+    body = { prompt: promptText };
   } else {
     endpoint = '/generate-carousel';
     body = getFormPayload();
@@ -199,7 +190,7 @@ form.addEventListener('submit', async (e) => {
 
   previewPlaceholder.classList.add('hidden');
   previewBox.classList.add('hidden');
-  slideTotalProgress.textContent = body.slide_count;
+  slideTotalProgress.textContent = body.slide_count || '…';
   slideProgress.textContent = '0';
   previewLoading.classList.remove('hidden');
 
@@ -646,36 +637,119 @@ document.getElementById('editorDelete').addEventListener('click', () => {
   if (slideEditor) { const sel = slideEditor.getSelected(); if (sel) slideEditor.deleteLayer(sel.id); }
 });
 
-// ── Text Replace (cover old text + add new editable text) ───────────────────
-document.getElementById('textReplaceBtn').addEventListener('click', () => {
-  if (!slideEditor) return;
-  const cw = slideEditor.canvasW;
-  const ch = slideEditor.canvasH;
+// ── Detect & Edit Text ───────────────────────────────────────────────────────
+const detectTextBtn = document.getElementById('detectTextBtn');
+const detectTextBtnText = document.getElementById('detectTextBtnText');
+const detectTextBtnLoader = document.getElementById('detectTextBtnLoader');
+const detectTextStatus = document.getElementById('detectTextStatus');
 
-  // Step 1: Add a cover rectangle (matches common bg colors)
-  // Use an eyedropper-like approach: sample the center pixel color for the cover
-  const ctx = slideEditor.ctx;
-  const centerPixel = ctx.getImageData(Math.floor(cw / 2), Math.floor(ch / 2), 1, 1).data;
-  const coverColor = `#${((1 << 24) + (centerPixel[0] << 16) + (centerPixel[1] << 8) + centerPixel[2]).toString(16).slice(1)}`;
+const fontSizeMap = { small: 0.03, medium: 0.055, large: 0.08, xlarge: 0.12 };
 
-  const rectW = Math.round(cw * 0.6);
-  const rectH = Math.round(ch * 0.12);
-  const rectX = Math.round((cw - rectW) / 2);
-  const rectY = Math.round((ch - rectH) / 2);
+detectTextBtn.addEventListener('click', async () => {
+  if (!slideEditor || editingSlideIndex < 0) return;
 
-  slideEditor.addShape('rect', {
-    x: rectX, y: rectY, w: rectW, h: rectH,
-    fill: coverColor, borderRadius: 8, opacity: 1,
-  });
+  // Get the raw slide image data (not the canvas with layers — the original AI image)
+  const slide = slides[editingSlideIndex];
+  if (!slide) return;
 
-  // Step 2: Add editable text on top
-  slideEditor.addText('Double-click to edit', {
-    x: rectX + 10, y: rectY + 4,
-    w: rectW - 20, h: rectH - 8,
-    fontSize: Math.round(rectH * 0.5),
-    fontWeight: '700', color: '#ffffff',
-    align: 'center',
-  });
+  detectTextBtnText.classList.add('hidden');
+  detectTextBtnLoader.classList.remove('hidden');
+  detectTextBtn.disabled = true;
+  detectTextStatus.classList.add('hidden');
+
+  try {
+    const res = await fetch('/detect-text', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: slide.image, mime_type: slide.mime_type }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      detectTextStatus.textContent = '⚠ ' + (data.error || 'Detection failed');
+      detectTextStatus.classList.remove('hidden');
+      return;
+    }
+
+    const regions = data.regions || [];
+    if (regions.length === 0) {
+      detectTextStatus.textContent = 'No text found in the image.';
+      detectTextStatus.classList.remove('hidden');
+      return;
+    }
+
+    const cw = slideEditor.canvasW;
+    const ch = slideEditor.canvasH;
+
+    // Draw ONLY the background image onto a temp canvas to sample colors cleanly
+    // (avoids sampling text pixels from the live canvas)
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = cw;
+    tmpCanvas.height = ch;
+    const tmpCtx = tmpCanvas.getContext('2d');
+    if (slideEditor.bgImage) {
+      tmpCtx.drawImage(slideEditor.bgImage, 0, 0, cw, ch);
+    }
+
+    regions.forEach(region => {
+      // Add a small padding so cover rect fully hides the baked text
+      const pad = 6;
+      const x = Math.max(0, Math.round((region.x / 100) * cw) - pad);
+      const y = Math.max(0, Math.round((region.y / 100) * ch) - pad);
+      const w = Math.min(cw - x, Math.round((region.w / 100) * cw) + pad * 2);
+      const h = Math.min(ch - y, Math.round((region.h / 100) * ch) + pad * 2);
+
+      // Sample color from multiple points and pick the most common-ish
+      // by averaging a few pixels around the text area edges (avoiding center where text is)
+      const samplePoints = [
+        [x + 2, y + 2],
+        [x + w - 2, y + 2],
+        [x + 2, y + h - 2],
+        [x + w - 2, y + h - 2],
+        [x + Math.floor(w / 2), y + 2],
+        [x + Math.floor(w / 2), y + h - 2],
+      ];
+      let rSum = 0, gSum = 0, bSum = 0;
+      samplePoints.forEach(([sx, sy]) => {
+        const px = tmpCtx.getImageData(Math.max(0, Math.min(cw - 1, sx)), Math.max(0, Math.min(ch - 1, sy)), 1, 1).data;
+        rSum += px[0]; gSum += px[1]; bSum += px[2];
+      });
+      const n = samplePoints.length;
+      const bgHex = `#${((1 << 24) + (Math.round(rSum/n) << 16) + (Math.round(gSum/n) << 8) + Math.round(bSum/n)).toString(16).slice(1)}`;
+
+      // Cover rect — hides original baked-in text
+      slideEditor.addShape('rect', {
+        x, y, w, h,
+        fill: bgHex,
+        borderRadius: 0,
+        opacity: 1,
+      });
+
+      // Editable text layer on top
+      const fsRatio = fontSizeMap[region.fontSize] || 0.055;
+      const fontSize = Math.max(12, Math.round(ch * fsRatio));
+      slideEditor.addText(region.text, {
+        x, y,
+        w, h,
+        fontSize,
+        fontWeight: region.fontWeight === 'bold' ? '800' : '500',
+        color: region.color || '#ffffff',
+        align: 'center',
+      });
+    });
+
+    detectTextStatus.textContent = `✓ ${regions.length} text element${regions.length > 1 ? 's' : ''} detected — double-click any to edit`;
+    detectTextStatus.classList.remove('hidden');
+    refreshLayers(slideEditor.layers);
+
+  } catch (err) {
+    detectTextStatus.textContent = '⚠ Error: ' + err.message;
+    detectTextStatus.classList.remove('hidden');
+  } finally {
+    detectTextBtnText.classList.remove('hidden');
+    detectTextBtnLoader.classList.add('hidden');
+    detectTextBtn.disabled = false;
+  }
 });
 
 // ── Add Elements ────────────────────────────────────────────────────────────
