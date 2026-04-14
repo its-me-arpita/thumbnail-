@@ -6,11 +6,181 @@ const layersList = document.getElementById('layersList');
 
 // ── Preset templates ────────────────────────────────────────────────────────
 const TEMPLATES = {
+  // ── Blank ─────────────────────────────────────
   blank: { bg: '#1a1a2e', layers: [] },
+
+  // ── YouTube: Dark Cinematic ───────────────────
+  'yt-cinematic': {
+    bg: '#0a0010',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0a0010' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 6, h: 720, fill: '#7c3aed' },
+      { type: 'shape', shape: 'rect', x: 580, y: 0, w: 700, h: 720, fill: '#7c3aed', opacity: 0.08 },
+      { type: 'text', text: 'EXCLUSIVE', x: 60, y: 180, w: 500, h: 40, fontSize: 22, fontWeight: '800', color: '#a78bfa', align: 'left' },
+      { type: 'text', text: 'UNTOLD\nSECRETS', x: 60, y: 240, w: 700, h: 220, fontSize: 110, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'shape', shape: 'rect', x: 60, y: 490, w: 180, h: 6, fill: '#7c3aed', borderRadius: 3 },
+      { type: 'text', text: 'Watch before it\'s removed', x: 60, y: 514, w: 500, h: 40, fontSize: 22, fontWeight: '500', color: '#c4b5fd', align: 'left' },
+      { type: 'text', text: '👁 2.4M VIEWS', x: 60, y: 620, w: 260, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#7c3aed', borderRadius: 22 },
+    ],
+  },
+
+  // ── YouTube: Bold Reaction ────────────────────
+  'yt-reaction': {
+    bg: '#0f0f0f',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0f0f0f' },
+      { type: 'shape', shape: 'rect', x: 700, y: 0, w: 580, h: 720, fill: '#dc2626' },
+      { type: 'shape', shape: 'rect', x: 0, y: 706, w: 1280, h: 14, fill: '#dc2626' },
+      { type: 'text', text: 'I CAN\'T', x: 50, y: 60, w: 620, h: 180, fontSize: 130, fontWeight: '900', color: '#ef4444', align: 'left' },
+      { type: 'text', text: 'BELIEVE\nTHIS', x: 50, y: 280, w: 580, h: 220, fontSize: 110, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'text', text: '😱', x: 760, y: 200, w: 360, h: 360, fontSize: 220, fontWeight: '400', color: '#ffffff', align: 'center' },
+      { type: 'text', text: '🔥 TRENDING', x: 50, y: 620, w: 240, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#dc2626', borderRadius: 22 },
+    ],
+  },
+
+  // ── Tech: Neon Code ───────────────────────────
+  'tech-code': {
+    bg: '#060d1a',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#060d1a' },
+      { type: 'shape', shape: 'rect', x: 760, y: 60, w: 460, h: 600, fill: '#0d1f33', borderRadius: 12 },
+      { type: 'shape', shape: 'rect', x: 760, y: 60, w: 460, h: 600, fill: 'transparent', stroke: '#00ffc8', strokeWidth: 1, borderRadius: 12, opacity: 0.25 },
+      { type: 'text', text: '● ● ●', x: 780, y: 82, w: 100, h: 20, fontSize: 14, fontWeight: '400', color: '#ef4444', align: 'left' },
+      { type: 'text', text: 'const ai = buildApp();\n// 🚀 launch it', x: 780, y: 120, w: 420, h: 120, fontSize: 26, fontWeight: '400', color: '#00ffc8', align: 'left' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 4, h: 720, fill: '#00ffc8' },
+      { type: 'text', text: 'TUTORIAL', x: 50, y: 150, w: 400, h: 40, fontSize: 22, fontWeight: '800', color: '#00ffc8', align: 'left' },
+      { type: 'text', text: 'Build an AI\nApp in\n30 Minutes', x: 50, y: 210, w: 660, h: 300, fontSize: 100, fontWeight: '900', color: '#e0f7ff', align: 'left' },
+      { type: 'text', text: '⚡ TECH', x: 50, y: 620, w: 160, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#0080ff', borderRadius: 22 },
+    ],
+  },
+
+  // ── Business: Corporate Split ─────────────────
+  'biz-split': {
+    bg: '#0f172a',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0f172a' },
+      { type: 'shape', shape: 'rect', x: 860, y: 0, w: 420, h: 720, fill: '#2563eb' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 4, h: 720, fill: '#2563eb' },
+      { type: 'text', text: 'STRATEGY', x: 50, y: 120, w: 450, h: 40, fontSize: 22, fontWeight: '800', color: '#60a5fa', align: 'left' },
+      { type: 'text', text: 'Scale Your\nBusiness\n10× Faster', x: 50, y: 175, w: 750, h: 320, fontSize: 100, fontWeight: '900', color: '#f0f9ff', align: 'left' },
+      { type: 'shape', shape: 'rect', x: 50, y: 530, w: 180, h: 6, fill: '#2563eb', borderRadius: 3 },
+      { type: 'text', text: 'Proven growth frameworks', x: 50, y: 554, w: 500, h: 36, fontSize: 22, fontWeight: '500', color: '#93c5fd', align: 'left' },
+      { type: 'text', text: '💼 BUSINESS', x: 50, y: 628, w: 240, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#1d4ed8', borderRadius: 22 },
+    ],
+  },
+
+  // ── Business: Finance Growth ──────────────────
+  finance: {
+    bg: '#050e05',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#050e05' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 4, h: 720, fill: '#22c55e' },
+      { type: 'text', text: 'INVESTING', x: 50, y: 120, w: 400, h: 40, fontSize: 22, fontWeight: '800', color: '#4ade80', align: 'left' },
+      { type: 'text', text: 'How I Made\n$10K Passive\nIncome', x: 50, y: 175, w: 720, h: 320, fontSize: 96, fontWeight: '900', color: '#f0fdf4', align: 'left' },
+      { type: 'shape', shape: 'rect', x: 50, y: 530, w: 160, h: 6, fill: '#22c55e', borderRadius: 3 },
+      { type: 'text', text: 'Step-by-step breakdown →', x: 50, y: 554, w: 500, h: 36, fontSize: 22, fontWeight: '500', color: '#86efac', align: 'left' },
+      { type: 'text', text: '💰 FINANCE', x: 50, y: 628, w: 220, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#15803d', borderRadius: 22 },
+    ],
+  },
+
+  // ── Lifestyle: Fitness Energy ─────────────────
+  fitness: {
+    bg: '#0a0a0a',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0a0a0a' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 4, h: 720, fill: '#fb923c' },
+      { type: 'text', text: '30-DAY', x: 50, y: 100, w: 400, h: 40, fontSize: 24, fontWeight: '800', color: '#fb923c', align: 'left' },
+      { type: 'text', text: 'BODY\nTRANSFORM-\nATION', x: 50, y: 155, w: 720, h: 360, fontSize: 110, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'shape', shape: 'rect', x: 50, y: 550, w: 200, h: 6, fill: '#fb923c', borderRadius: 3 },
+      { type: 'text', text: 'No gym · Beginner friendly', x: 50, y: 574, w: 500, h: 36, fontSize: 22, fontWeight: '500', color: '#fed7aa', align: 'left' },
+      { type: 'text', text: '💪 FITNESS', x: 50, y: 632, w: 210, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#ea580c', borderRadius: 22 },
+      { type: 'text', text: '🔥', x: 950, y: 210, w: 240, h: 240, fontSize: 200, fontWeight: '400', color: '#ffffff', align: 'center' },
+    ],
+  },
+
+  // ── Lifestyle: Travel Scenic ──────────────────
+  travel: {
+    bg: '#0ea5e9',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0ea5e9' },
+      { type: 'shape', shape: 'rect', x: 0, y: 280, w: 1280, h: 440, fill: '#065f46' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#000000', opacity: 0.4 },
+      { type: 'text', text: 'TRAVEL GUIDE', x: 60, y: 80, w: 500, h: 40, fontSize: 22, fontWeight: '800', color: '#7dd3fc', align: 'left' },
+      { type: 'text', text: 'Top 10 Hidden\nGems in Europe', x: 60, y: 140, w: 800, h: 250, fontSize: 100, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'text', text: '✈ Must-visit spots 2025', x: 60, y: 560, w: 500, h: 36, fontSize: 22, fontWeight: '500', color: '#bae6fd', align: 'left' },
+      { type: 'text', text: '🌍 TRAVEL', x: 60, y: 624, w: 200, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#0369a1', borderRadius: 22 },
+    ],
+  },
+
+  // ── Gaming: Neon Hex ──────────────────────────
+  'gaming-neon': {
+    bg: '#07001a',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#07001a' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 3, fill: '#a855f7' },
+      { type: 'shape', shape: 'rect', x: 0, y: 717, w: 1280, h: 3, fill: '#a855f7' },
+      { type: 'shape', shape: 'circle', x: 800, y: 60, w: 560, h: 560, fill: 'transparent', stroke: '#a855f7', strokeWidth: 2, opacity: 0.18 },
+      { type: 'shape', shape: 'circle', x: 860, y: 140, w: 400, h: 400, fill: 'transparent', stroke: '#7c3aed', strokeWidth: 1.5, opacity: 0.12 },
+      { type: 'text', text: 'GAMEPLAY', x: 50, y: 110, w: 400, h: 38, fontSize: 20, fontWeight: '800', color: '#c084fc', align: 'left' },
+      { type: 'text', text: 'EPIC WIN\nImpossible\nBoss Fight', x: 50, y: 160, w: 720, h: 340, fontSize: 110, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'text', text: '⚔️', x: 950, y: 220, w: 240, h: 240, fontSize: 190, fontWeight: '400', color: '#ffffff', align: 'center' },
+      { type: 'text', text: '🎮 GAMING', x: 50, y: 630, w: 220, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#7c3aed', borderRadius: 22 },
+    ],
+  },
+
+  // ── Business: Podcast Studio Dark ────────────
+  podcast: {
+    bg: '#0e0e10',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0e0e10' },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 500, h: 720, fill: '#4c1d95' },
+      { type: 'shape', shape: 'rect', x: 500, y: 0, w: 2, h: 720, fill: '#7c3aed', opacity: 0.6 },
+      { type: 'text', text: '🎙️', x: 130, y: 240, w: 240, h: 240, fontSize: 160, fontWeight: '400', color: '#ffffff', align: 'center' },
+      { type: 'text', text: 'EP. 42', x: 540, y: 120, w: 400, h: 38, fontSize: 22, fontWeight: '800', color: '#a78bfa', align: 'left' },
+      { type: 'text', text: 'The Future of\nAI & Creativity', x: 540, y: 175, w: 680, h: 200, fontSize: 74, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'text', text: 'with Guest Name', x: 540, y: 415, w: 400, h: 36, fontSize: 24, fontWeight: '500', color: '#a1a1aa', align: 'left' },
+      { type: 'text', text: '🎧 PODCAST', x: 540, y: 628, w: 230, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#7c3aed', borderRadius: 22 },
+    ],
+  },
+
+  // ── Education: Bright Course ──────────────────
+  edu: {
+    bg: '#eff6ff',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#eff6ff' },
+      { type: 'shape', shape: 'rect', x: 740, y: 0, w: 540, h: 720, fill: '#2563eb' },
+      { type: 'shape', shape: 'rect', x: 60, y: 130, w: 600, h: 420, fill: '#ffffff', borderRadius: 16 },
+      { type: 'text', text: "WHAT YOU'LL LEARN", x: 90, y: 160, w: 540, h: 36, fontSize: 18, fontWeight: '900', color: '#1d4ed8', align: 'left' },
+      { type: 'text', text: '✅ Basics & Fundamentals', x: 90, y: 214, w: 540, h: 36, fontSize: 22, fontWeight: '500', color: '#374151', align: 'left' },
+      { type: 'text', text: '✅ Advanced Techniques', x: 90, y: 262, w: 540, h: 36, fontSize: 22, fontWeight: '500', color: '#374151', align: 'left' },
+      { type: 'text', text: '⬜ Expert Mastery', x: 90, y: 310, w: 540, h: 36, fontSize: 22, fontWeight: '500', color: '#9ca3af', align: 'left' },
+      { type: 'text', text: 'COURSE', x: 790, y: 120, w: 400, h: 40, fontSize: 22, fontWeight: '800', color: '#bfdbfe', align: 'left' },
+      { type: 'text', text: 'Complete\nPython\nBootcamp', x: 790, y: 175, w: 440, h: 300, fontSize: 90, fontWeight: '900', color: '#ffffff', align: 'left' },
+      { type: 'text', text: 'Beginner → Expert', x: 790, y: 510, w: 420, h: 36, fontSize: 22, fontWeight: '500', color: '#bfdbfe', align: 'left' },
+      { type: 'text', text: '📚 COURSE', x: 790, y: 624, w: 210, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#1d4ed8', borderRadius: 22 },
+    ],
+  },
+
+  // ── YouTube: Cinematic Quote ──────────────────
+  motivation: {
+    bg: '#1e1b4b',
+    layers: [
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#1e1b4b' },
+      { type: 'shape', shape: 'circle', x: 340, y: 60, w: 600, h: 600, fill: '#818cf8', opacity: 0.08 },
+      { type: 'shape', shape: 'rect', x: 240, y: 290, w: 800, h: 2, fill: '#a5b4fc', opacity: 0.4 },
+      { type: 'shape', shape: 'rect', x: 240, y: 428, w: 800, h: 2, fill: '#a5b4fc', opacity: 0.4 },
+      { type: 'text', text: '"', x: 60, y: 20, w: 200, h: 180, fontSize: 200, fontWeight: '900', color: '#818cf8', align: 'left', opacity: 0.12 },
+      { type: 'text', text: 'Your only limit\nis your mind.', x: 240, y: 304, w: 800, h: 120, fontSize: 72, fontWeight: '900', color: '#e0e7ff', align: 'center' },
+      { type: 'text', text: '— DAILY MOTIVATION', x: 390, y: 448, w: 500, h: 36, fontSize: 20, fontWeight: '600', color: '#a5b4fc', align: 'center' },
+      { type: 'text', text: '💡 MOTIVATION', x: 490, y: 620, w: 300, h: 44, fontSize: 18, fontWeight: '800', color: '#ffffff', bgColor: '#6366f1', borderRadius: 22 },
+    ],
+  },
+
+  // ── Legacy aliases (old template names still work) ────
   youtube: {
     bg: '#0f0f23',
     layers: [
-      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: 'linear', bgGrad: ['#1a0533','#0f0f23'], opacity: 1 },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#0f0f23' },
       { type: 'shape', shape: 'rect', x: 0, y: 560, w: 1280, h: 160, fill: '#7c3aed', opacity: 0.85 },
       { type: 'text', text: 'YOUR TITLE HERE', x: 60, y: 180, w: 800, h: 120, fontSize: 72, fontWeight: '800', color: '#ffffff' },
       { type: 'text', text: 'Subtitle or description', x: 60, y: 310, w: 600, h: 50, fontSize: 28, fontWeight: '500', color: '#a78bfa' },
@@ -20,36 +190,19 @@ const TEMPLATES = {
   gaming: {
     bg: '#0a0a0a',
     layers: [
-      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#1a0a2e', opacity: 1 },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#1a0a2e' },
       { type: 'shape', shape: 'rect', x: 40, y: 40, w: 1200, h: 640, fill: 'transparent', stroke: '#f59e0b', strokeWidth: 4, borderRadius: 20 },
       { type: 'text', text: 'EPIC GAMING', x: 100, y: 120, w: 700, h: 130, fontSize: 84, fontWeight: '800', color: '#f59e0b' },
       { type: 'text', text: 'MOMENTS', x: 100, y: 260, w: 500, h: 80, fontSize: 64, fontWeight: '800', color: '#ffffff' },
-      { type: 'shape', shape: 'circle', x: 900, y: 200, w: 280, h: 280, fill: '#f59e0b', opacity: 0.15 },
-      { type: 'text', text: 'TOP 10', x: 950, y: 290, w: 180, h: 60, fontSize: 36, fontWeight: '800', color: '#f59e0b', align: 'center' },
     ],
   },
   tutorial: {
     bg: '#f8fafc',
     layers: [
-      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 500, h: 720, fill: '#7c3aed', opacity: 1 },
+      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 500, h: 720, fill: '#7c3aed' },
       { type: 'text', text: 'HOW TO', x: 40, y: 200, w: 420, h: 70, fontSize: 48, fontWeight: '800', color: '#ffffff', align: 'left' },
       { type: 'text', text: 'MASTER\nTHIS SKILL', x: 40, y: 280, w: 420, h: 140, fontSize: 56, fontWeight: '800', color: '#e9d5ff', align: 'left' },
-      { type: 'text', text: 'Step-by-step guide', x: 540, y: 580, w: 400, h: 40, fontSize: 22, fontWeight: '500', color: '#64748b', align: 'left' },
       { type: 'text', text: 'TUTORIAL', x: 540, y: 200, w: 300, h: 60, fontSize: 42, fontWeight: '800', color: '#1e293b', align: 'left' },
-      { type: 'shape', shape: 'circle', x: 540, y: 300, w: 200, h: 200, fill: '#f3f0ff', opacity: 1 },
-      { type: 'text', text: '▶', x: 580, y: 350, w: 120, h: 100, fontSize: 60, fontWeight: '400', color: '#7c3aed', align: 'center' },
-    ],
-  },
-  podcast: {
-    bg: '#18181b',
-    layers: [
-      { type: 'shape', shape: 'rect', x: 0, y: 0, w: 1280, h: 720, fill: '#18181b' },
-      { type: 'shape', shape: 'circle', x: 80, y: 160, w: 400, h: 400, fill: '#27272a' },
-      { type: 'text', text: '🎙', x: 200, y: 280, w: 160, h: 160, fontSize: 100, fontWeight: '400', color: '#ffffff', align: 'center' },
-      { type: 'text', text: 'THE PODCAST', x: 560, y: 180, w: 640, h: 80, fontSize: 52, fontWeight: '800', color: '#ffffff', align: 'left' },
-      { type: 'text', text: 'Episode Title Here', x: 560, y: 280, w: 640, h: 50, fontSize: 30, fontWeight: '500', color: '#a1a1aa', align: 'left' },
-      { type: 'shape', shape: 'rect', x: 560, y: 370, w: 200, h: 45, fill: '#ef4444', borderRadius: 8 },
-      { type: 'text', text: 'NEW EPISODE', x: 570, y: 373, w: 180, h: 40, fontSize: 18, fontWeight: '700', color: '#ffffff', align: 'center' },
     ],
   },
   minimal: {
